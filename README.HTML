@@ -22,6 +22,8 @@ display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;a
 text-shadow:0 1px 3px rgba(0,0,0,.6);transition:transform .12s}
 .icon:hover{transform:scale(1.07)}.icon img{width:52px;height:52px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
 .icon span{margin-top:5px;font-size:12px;text-align:center;max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icon.installed img{animation:dropIn .4s cubic-bezier(.2,1,.2,1)}
+@keyframes dropIn{from{opacity:0;transform:translateY(-20px) scale(.5)}to{opacity:1;transform:translateY(0) scale(1)}}
 .widgets{position:absolute;top:16px;right:16px;width:280px;background:var(--glass);
 backdrop-filter:blur(16px);border-radius:18px;padding:16px;box-shadow:0 8px 36px rgba(0,0,0,.18);z-index:5}
 .widgets h3{font-size:14px;margin-bottom:4px}.widgets .temp{font-size:30px;font-weight:700;color:var(--accent)}
@@ -141,8 +143,7 @@ display:none;flex-direction:column;z-index:2500;overflow:hidden}
 .tp-section{padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.06)}
 body.dark .tp-section{border-color:rgba(255,255,255,.08)}
 .tp-label{font-size:12px;font-weight:600;color:#888;margin-bottom:8px;text-transform:uppercase}
-.tp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.tp-row:last-child{margin-bottom:0}
+.tp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}.tp-row:last-child{margin-bottom:0}
 .tp-icon{font-size:18px;cursor:pointer;width:28px;text-align:center}
 .tp-slider{flex:1;-webkit-appearance:none;height:6px;background:#ddd;border-radius:3px;outline:none}
 body.dark .tp-slider{background:#333}
@@ -151,24 +152,75 @@ body.dark .tp-slider{background:#333}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:8px}
 .cal-dow{text-align:center;font-size:11px;color:#888;padding:4px 0}
 .cal-day{text-align:center;font-size:13px;padding:6px 0;border-radius:6px;cursor:pointer}
-.cal-day:hover{background:rgba(0,120,215,.1)}
-.cal-day.today{background:var(--accent);color:#fff;font-weight:700}
+.cal-day:hover{background:rgba(0,120,215,.1)}.cal-day.today{background:var(--accent);color:#fff;font-weight:700}
 .cal-day.other{opacity:.3}
 .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .cal-head span{font-size:14px;font-weight:600}
 .cal-nav{cursor:pointer;font-size:16px;padding:2px 8px;border-radius:6px}.cal-nav:hover{background:rgba(0,120,215,.1)}
 .tp-btn{padding:8px;border:1px solid rgba(0,0,0,.1);border-radius:8px;background:transparent;cursor:pointer;font-size:13px;text-align:center}
-body.dark .tp-btn{border-color:rgba(255,255,255,.15)}
-.tp-btn:hover{background:rgba(0,120,215,.08)}
+body.dark .tp-btn{border-color:rgba(255,255,255,.15)}.tp-btn:hover{background:rgba(0,120,215,.08)}
 .tp-btns{display:flex;gap:8px;margin-top:8px}
 .store-card{border:1px solid #ddd;border-radius:12px;padding:14px;display:flex;flex-direction:column;align-items:center;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:transform .15s,box-shadow .15s}
 .store-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .steam-card{border:1px solid #2a333d;border-radius:8px;padding:12px;display:flex;flex-direction:column;align-items:center;background:#1b2838;box-shadow:0 4px 12px rgba(0,0,0,.2);color:#fff;transition:transform .15s,box-shadow .15s}
 .steam-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
 .dl-bar{width:100%;height:6px;background:#ddd;border-radius:3px;overflow:hidden;margin-top:8px;display:none}
-.dl-bar.show{display:block}
-.dl-fill{width:0%;height:100%;background:var(--accent);transition:width .3s;border-radius:3px}
+.dl-bar.show{display:block}.dl-fill{width:0%;height:100%;background:var(--accent);transition:width .3s;border-radius:3px}
 body.dark .dl-bar{background:#333}
+.app-win{padding:20px;height:100%;overflow:auto}
+.music-player{background:#1a1a2e;color:#fff;border-radius:16px;padding:24px;margin:0 auto;max-width:420px}
+.music-cover{width:180px;height:180px;border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:72px;background:linear-gradient(135deg,#1db954,#1ed760)}
+.music-track{font-size:18px;font-weight:600;text-align:center;margin-bottom:4px}
+.music-artist{font-size:14px;color:#888;text-align:center;margin-bottom:16px}
+.music-controls{display:flex;justify-content:center;gap:20px;align-items:center}
+.music-btn{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;transition:transform .1s}
+.music-btn:hover{transform:scale(1.2)}.music-btn.play{width:56px;height:56px;background:#1db954;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.music-progress{height:4px;background:#333;border-radius:2px;margin:16px 0;overflow:hidden}
+.music-progress-fill{width:0%;height:100%;background:#1db954;transition:width 1s linear}
+.chat-win{display:flex;height:100%;flex-direction:column}
+.chat-msgs{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:8px}
+.chat-bubble{max-width:70%;padding:10px 14px;border-radius:14px;font-size:14px}
+.chat-bubble.me{align-self:flex-end;background:#0078d7;color:#fff}
+.chat-bubble.them{align-self:flex-start;background:#eef0f2;color:#333}body.dark .chat-bubble.them{background:#2a2a3e;color:#ccc}
+.chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(0,0,0,.06)}
+.chat-input{flex:1;padding:10px 14px;border:1px solid #ddd;border-radius:20px;font-size:14px;outline:none}
+.chat-send{padding:10px 20px;background:#0078d7;color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:14px}
+.netflix-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.netflix-card{border-radius:8px;overflow:hidden;cursor:pointer;transition:transform .15s}.netflix-card:hover{transform:scale(1.05)}
+.netflix-thumb{height:90px;display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff}
+.netflix-name{padding:8px;font-size:13px;font-weight:600}
+.zoom-win{display:flex;flex-direction:column;height:100%;background:#1a1a2e;color:#fff}
+.zoom-main{flex:1;display:flex;align-items:center;justify-content:center}
+.zoom-video{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#0078d7,#00a4ef);display:flex;align-items:center;justify-content:center;font-size:48px}
+.zoom-controls{padding:16px;display:flex;justify-content:center;gap:12px}
+.zoom-btn{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;font-size:20px;background:#333;color:#fff}
+.zoom-btn.end{background:#e81123}
+.code-editor{display:flex;height:100%;flex-direction:column}
+.code-tabs{display:flex;background:#252526;border-bottom:1px solid #1e1e1e}
+.code-tab{padding:8px 16px;font-size:13px;color:#888;cursor:pointer;border-bottom:2px solid transparent}
+.code-tab.act{color:#fff;border-bottom-color:#0078d7}
+.code-area{flex:1;background:#1e1e1e;color:#d4d4d4;border:none;resize:none;font-family:'Consolas',monospace;font-size:14px;padding:16px;outline:none}
+.game-arena{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#0a0a1a;color:#fff}
+.game-score{font-size:24px;font-weight:700;margin-bottom:16px}
+.game-btn{padding:16px 40px;font-size:20px;font-weight:700;border:none;border-radius:12px;cursor:pointer;background:var(--accent);color:#fff;transition:transform .1s}
+.game-btn:hover{transform:scale(1.05)}
+.ng-wrap{padding:16px;display:flex;flex-direction:column;height:100%;font-family:sans-serif}
+.ng-status{margin-bottom:12px;padding:8px 12px;background:#e7f0fc;border-radius:8px;color:#0078d7;font-size:13px;font-weight:600}
+.ng-board{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:16px auto;width:100%}
+.ng-cell{aspect-ratio:1;border:2px solid #0078d7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;cursor:pointer;transition:background .15s;cursor:pointer;background:#fff;color:#0078d7}
+body.dark .ng-cell{background:#1a1a2e;color:#48bfe3;border-color:#48bfe3}
+.ng-cell:hover{background:#e7f0fc}body.dark .ng-cell:hover{background:#1a2840}
+.ng-cell.x{color:#e81123}body.dark .ng-cell.x{color:#ff6b6b}
+.ng-cell.o{color:#0078d7}body.dark .ng-cell.o{color:#48bfe3}
+.ng-cell.win{background:#107c10;color:#fff;animation:ngWin .5s ease}
+@keyframes ngWin{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.ng-cell.taken{cursor:default}
+.ng-info{text-align:center;margin:10px 0;font-size:14px;font-weight:600}
+.ng-room-btn{padding:10px 20px;border:2px solid #0078d7;background:#fff;color:#0078d7;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600}
+body.dark .ng-room-btn{background:#1a1a2e;color:#48bfe3}
+.ng-room-btn:hover{background:#e7f0fc}body.dark .ng-room-btn:hover{background:#1a2840}
+.ng-code{font-size:32px;font-weight:700;text-align:center;color:#0078d7;letter-spacing:4px;margin:10px 0}
+body.dark .ng-code{color:#48bfe3}
 </style>
 </head>
 <body>
@@ -178,7 +230,6 @@ body.dark .dl-bar{background:#333}
   <div id="boot-bar"><div id="boot-fill"></div></div>
   <div id="boot-spin"></div>
 </div>
-
 <div class="wp" id="wp"></div>
 <div class="widgets">
   <h3>Погода</h3><div class="temp">+12°C</div><div class="desc">Иркутск • Облачно</div>
@@ -194,6 +245,7 @@ body.dark .dl-bar{background:#333}
   <div class="icon" onclick="openApp('terminal')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='8' width='40' height='36' rx='4' fill='%231a1a1a'/%3E%3Cpath d='M14 18l8 6-8 6' fill='none' stroke='%230f0' stroke-width='2'/%3E%3C/svg%3E"><span>Терминал</span></div>
   <div class="icon" onclick="openApp('msstore')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='6' width='40' height='40' rx='8' fill='%230078d7'/%3E%3Cpath d='M18 18h16v16H18z' fill='white'/%3E%3C/svg%3E"><span>Microsoft Store</span></div>
   <div class="icon" onclick="openApp('steam')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Ccircle cx='26' cy='26' r='22' fill='%231b2838'/%3E%3Cpath d='M26 12c7.732 0 14 6.268 14 14s-6.268 14-14 14-14-6.268-14-14 6.268-14 14-14z' fill='%23fff' opacity='.4'/%3E%3Cpath d='M26 20c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6z' fill='%23fff'/%3E%3C/svg%3E"><span>Steam</span></div>
+  <div class="icon" onclick="openApp('netgame')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='6' width='40' height='40' rx='8' fill='%23107c10'/%3E%3Ctext x='26' y='34' font-size='20' text-anchor='middle' fill='white'%3E%E2%9A%94%3C/text%3E%3C/svg%3E"><span>Сетевая игра</span></div>
 </div>
 <div class="taskbar">
   <button class="start-btn" id="start-btn">⊞</button>
@@ -222,14 +274,12 @@ body.dark .dl-bar{background:#333}
 </div>
 <div id="wins"></div>
 <script>
-// === ЗАГРУЗКА ПК ===
 var bootFill=document.getElementById("boot-fill"),bootEl=document.getElementById("boot"),bootProgress=0;
 var bootInterval=setInterval(function(){bootProgress+=Math.random()*15+8;if(bootProgress>=100)bootProgress=100;
   bootFill.style.width=bootProgress+"%";
   if(bootProgress===100){clearInterval(bootInterval);setTimeout(function(){bootEl.style.opacity="0";
   setTimeout(function(){bootEl.style.display="none"},600)},500)}},200);
 
-// === ДАННЫЕ ПРИЛОЖЕНИЙ ===
 var apps={
   buber:{t:"Buber Tuder",i:"🌐",w:780,h:540,max:true},
   notepad:{t:"Блокнот",i:"📝",w:500,h:400},
@@ -239,18 +289,16 @@ var apps={
   paint:{t:"Paint",i:"🎨",w:580,h:440},
   terminal:{t:"Терминал",i:"💻",w:560,h:380},
   msstore:{t:"Microsoft Store",i:"🏪",w:800,h:560,max:true},
-  steam:{t:"Steam",i:"🎮",w:820,h:580,max:true}
+  steam:{t:"Steam",i:"🎮",w:820,h:580,max:true},
+  netgame:{t:"Сетевая игра",i:"⚔️",w:440,h:560}
 };
-var wins={},zc=100;
-var volLevel=65,brightLevel=80,wifiOn=true,nightOn=false,batLevel=78;
+var wins={},zc=100,volLevel=65,brightLevel=80,wifiOn=true,nightOn=false,batLevel=78;
 var calMonth=new Date().getMonth(),calYear=new Date().getFullYear();
+var installedApps=[],smTiles=document.getElementById("sm-tiles");
+function refreshSmTiles(){smTiles.innerHTML="";Object.keys(apps).forEach(function(id){var a=apps[id],d=document.createElement("div");d.className="tile";d.onclick=function(){openApp(id)};d.innerHTML="<span style='font-size:26px'>"+a.i+"</span><span>"+a.t+"</span>";smTiles.appendChild(d)})}
+refreshSmTiles();
+function addDesktopIcon(id,emoji,bg,name){if(installedApps.indexOf(id)>=0)return;installedApps.push(id);apps[id]={t:name,i:emoji,w:700,h:500,max:true};var d=document.createElement("div");d.className="icon installed";d.onclick=function(){openApp(id)};d.innerHTML="<img src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='4' y='4' width='44' height='44' rx='10' fill='"+encodeURIComponent(bg)+"'/%3E%3Ctext x='26' y='34' font-size='24' text-anchor='middle'>"+encodeURIComponent(emoji)+"%3C/text%3E%3C/svg%3E'><span>"+name+"</span>";document.getElementById("desktop").appendChild(d);refreshSmTiles()}
 
-var smTiles=document.getElementById("sm-tiles");
-Object.keys(apps).forEach(function(id){var a=apps[id],d=document.createElement("div");
-d.className="tile";d.onclick=function(){openApp(id)};
-d.innerHTML="<span style='font-size:26px'>"+a.i+"</span><span>"+a.t+"</span>";smTiles.appendChild(d)});
-
-// === ОТКРЫТИЕ ОКОН ===
 function openApp(id){
   document.getElementById("start-menu").classList.remove("open");
   if(wins[id]){wins[id].classList.remove("minimized");bringFront(wins[id]);return}
@@ -258,187 +306,110 @@ function openApp(id){
   if(a.max){w.style.position="fixed";w.style.left="0";w.style.top="0";w.style.width="100vw";w.style.height="100vh";w.style.border="none";w.style.boxShadow="none";w.dataset.m="1"}
   else{w.style.width=a.w+"px";w.style.height=a.h+"px";w.style.left=(80+Math.random()*100)+"px";w.style.top=(30+Math.random()*50)+"px"}
   w.style.zIndex=++zc;var body="";
-  if(id==="buber"){body="<div class='br-bar'><button class='br-btn' onclick='brBack()'>←</button><button class='br-btn' onclick='brFwd()'>→</button><button class='br-btn' onclick='brReload()'>⟳</button><button class='br-btn' onclick='brHome()'>🏠</button><input class='br-input' id='br-addr' placeholder='Поиск или URL...' onkeydown='if(event.key==\"Enter\")brGo(this.value)'><button class='br-btn' onclick='brNew()'>↗</button></div><iframe class='br-frame' id='br-frame' sandbox='allow-scripts allow-same-origin allow-forms allow-popups'></iframe><div class='br-info' id='br-info'>Готово</div>"}
-  else if(id==="notepad"){body="<div class='np-tb'><button class='np-btn' onclick='npSave()'>💾 Сохранить</button><button class='np-btn' onclick='npOpen()'>📂 Открыть</button><span style='margin-left:auto;padding:6px 10px;font-size:12px;color:#888' id='np-cnt'>0 символов</span></div><textarea class='np-area' id='np-area' placeholder='Введите текст...' oninput='document.getElementById(\"np-cnt\").textContent=this.value.length+\" символов\"'></textarea>"}
-  else if(id==="calc"){body="<div class='calc-disp' id='cd'>0</div><div class='calc-grid'>";
-    [["C","op"],["±","op"],["%","op"],["/","op"],["7",""],["8",""],["9",""],["*","op"],["4",""],["5",""],["6",""],["-","op"],["1",""],["2",""],["3",""],["+","op"],["0","wide"],[".",""],["=","eq"]].forEach(function(k){
-    var key=k[0],cls="calc-btn "+k[1],sp=k[1]==="wide"?"style='grid-column:span 2'":"",lb={"//":"÷","*":"×","-":"−"}[key]||key;
-    body+="<button class='"+cls+"' "+sp+" onclick='calcPress(\""+key+"\")'>"+lb+"</button>"});body+="</div>"}
-  else if(id==="settings"){body="<div class='set-grid'><div class='set-side'><h4>Система</h4><div class='act' id='st-sys' onclick='setTab(\"sys\")'>🖥️ Система</div><div id='st-per' onclick='setTab(\"per\")'>🎨 Персонализация</div><div id='st-net' onclick='setTab(\"net\")'>🌐 Сеть</div><div id='st-acc' onclick='setTab(\"acc\")'>👤 Учётные записи</div><div id='st-upd' onclick='setTab(\"upd\")'>🔄 Обновление</div></div><div class='set-main' id='set-main'></div></div>"}
-  else if(id==="explorer"){body="<div class='exp'><div class='exp-side'><div class='grp'>Быстрый доступ</div><div class='item act' onclick='expGo(\"Рабочий стол\",this)'>📁 Рабочий стол</div><div class='item' onclick='expGo(\"Документы\",this)'>📄 Документы</div><div class='item' onclick='expGo(\"Изображения\",this)'>🖼️ Изображения</div><div class='item' onclick='expGo(\"Музыка\",this)'>🎵 Музыка</div><div class='item' onclick='expGo(\"Загрузки\",this)'>📥 Загрузки</div></div><div class='exp-main'><div style='font-size:13px;color:#666;margin-bottom:12px' id='exp-path'>📁 Рабочий стол</div><div class='exp-files' id='exp-files'></div></div></div>"}
-  else if(id==="paint"){body="<div class='pt-wrap'><div class='pt-tools'><div style='font-size:11px;font-weight:600;color:#888'>ЦВЕТ</div><div class='pt-cols' id='pt-cols'></div><div style='font-size:11px;font-weight:600;color:#888;margin-top:6px'>РАЗМЕР</div><input type='range' min='1' max='40' value='5' id='pt-size' style='width:80px'><button class='np-btn' id='pt-eraser' onclick='ptErase(this)' style='margin-top:6px'>Ластик</button><button class='np-btn' onclick='ptSave()' style='margin-top:4px'>💾 PNG</button><button class='np-btn' onclick='ptClear()' style='margin-top:4px'>Очистить</button></div><canvas id='pt-canvas' width='400' height='340'></canvas></div>"}
-  else if(id==="terminal"){body="<div style='display:flex;flex-direction:column;height:100%'><div class='term' id='term-out'></div><div style='display:flex;padding:8px;background:#0c0c0c;border-top:1px solid #333'><span style='color:#0f0;font-family:monospace;font-size:13px'>C:\\Users\\П&gt;&nbsp;</span><input class='term-in' id='term-in' autofocus onkeydown='termExec(event)'></div></div>"}
-  else if(id==="msstore"){body=renderMsStore()}
-  else if(id==="steam"){body=renderSteam()}
+  if(id==="buber")body=brBody();else if(id==="notepad")body=npBody();else if(id==="calc")body=calcBody();
+  else if(id==="settings")body=setBody();else if(id==="explorer")body=expBody();else if(id==="paint")body=ptBody();
+  else if(id==="terminal")body=termBody();else if(id==="msstore")body=renderMsStore();else if(id==="steam")body=renderSteam();
+  else if(id==="netgame")body=renderNetGame();else if(installedApps.indexOf(id)>=0)body=renderInstalledApp(id);
   w.innerHTML="<div class='title-bar' onmousedown='dragWin(event,\""+id+"\")'><span style='font-size:15px'>"+a.i+"</span><span class='ttl'>"+a.t+"</span><div class='wc'><button class='win-btn' onclick='minWin(\""+id+"\")'>─</button><button class='win-btn' onclick='maxWin(\""+id+"\")'>▢</button><button class='win-btn close' onclick='closeWin(\""+id+"\")'>✕</button></div></div><div class='win-body'>"+body+"</div>";
-  document.getElementById("wins").appendChild(w);wins[id]=w;
-  w.addEventListener("mousedown",function(){bringFront(w)});
-  if(id==="buber")setTimeout(brHome,50);if(id==="paint")setTimeout(ptInit,50);
-  if(id==="terminal")setTimeout(termInit,50);if(id==="settings")setTimeout(function(){setTab("sys")},50);
-  if(id==="explorer")setTimeout(function(){expGo("Рабочий стол",null)},50);updateTB()}
+  document.getElementById("wins").appendChild(w);wins[id]=w;w.addEventListener("mousedown",function(){bringFront(w)});
+  if(id==="buber")setTimeout(brHome,50);if(id==="paint")setTimeout(ptInit,50);if(id==="terminal")setTimeout(termInit,50);
+  if(id==="settings")setTimeout(function(){setTab("sys")},50);if(id==="explorer")setTimeout(function(){expGo("Рабочий стол",null)},50);
+  if(id==="netgame")setTimeout(ngInit,50);if(installedApps.indexOf(id)>=0)setTimeout(function(){initInstalledApp(id)},50);updateTB()}
+
+function brBody(){return "<div class='br-bar'><button class='br-btn' onclick='brBack()'>←</button><button class='br-btn' onclick='brFwd()'>→</button><button class='br-btn' onclick='brReload()'>⟳</button><button class='br-btn' onclick='brHome()'>🏠</button><input class='br-input' id='br-addr' placeholder='Поиск или URL...' onkeydown='if(event.key==\"Enter\")brGo(this.value)'><button class='br-btn' onclick='brNew()'>↗</button></div><iframe class='br-frame' id='br-frame' sandbox='allow-scripts allow-same-origin allow-forms allow-popups'></iframe><div class='br-info' id='br-info'>Готово</div>"}
+function npBody(){return "<div class='np-tb'><button class='np-btn' onclick='npSave()'>💾 Сохранить</button><button class='np-btn' onclick='npOpen()'>📂 Открыть</button><span style='margin-left:auto;padding:6px 10px;font-size:12px;color:#888' id='np-cnt'>0 символов</span></div><textarea class='np-area' id='np-area' placeholder='Введите текст...' oninput='document.getElementById(\"np-cnt\").textContent=this.value.length+\" символов\"'></textarea>"}
+function calcBody(){var b="<div class='calc-disp' id='cd'>0</div><div class='calc-grid'>";[["C","op"],["±","op"],["%","op"],["/","op"],["7",""],["8",""],["9",""],["*","op"],["4",""],["5",""],["6",""],["-","op"],["1",""],["2",""],["3",""],["+","op"],["0","wide"],[".",""],["=","eq"]].forEach(function(k){var key=k[0],cls="calc-btn "+k[1],sp=k[1]==="wide"?"style='grid-column:span 2'":"",lb={"//":"÷","*":"×","-":"−"}[key]||key;b+="<button class='"+cls+"' "+sp+" onclick='calcPress(\""+key+"\")'>"+lb+"</button>"});return b+"</div>"}
+function setBody(){return "<div class='set-grid'><div class='set-side'><h4>Система</h4><div class='act' id='st-sys' onclick='setTab(\"sys\")'>🖥️ Система</div><div id='st-per' onclick='setTab(\"per\")'>🎨 Персонализация</div><div id='st-net' onclick='setTab(\"net\")'>🌐 Сеть</div><div id='st-acc' onclick='setTab(\"acc\")'>👤 Учётные записи</div><div id='st-upd' onclick='setTab(\"upd\")'>🔄 Обновление</div></div><div class='set-main' id='set-main'></div></div>"}
+function expBody(){return "<div class='exp'><div class='exp-side'><div class='grp'>Быстрый доступ</div><div class='item act' onclick='expGo(\"Рабочий стол\",this)'>📁 Рабочий стол</div><div class='item' onclick='expGo(\"Документы\",this)'>📄 Документы</div><div class='item' onclick='expGo(\"Изображения\",this)'>🖼️ Изображения</div><div class='item' onclick='expGo(\"Музыка\",this)'>🎵 Музыка</div><div class='item' onclick='expGo(\"Загрузки\",this)'>📥 Загрузки</div></div><div class='exp-main'><div style='font-size:13px;color:#666;margin-bottom:12px' id='exp-path'>📁 Рабочий стол</div><div class='exp-files' id='exp-files'></div></div></div>"}
+function ptBody(){return "<div class='pt-wrap'><div class='pt-tools'><div style='font-size:11px;font-weight:600;color:#888'>ЦВЕТ</div><div class='pt-cols' id='pt-cols'></div><div style='font-size:11px;font-weight:600;color:#888;margin-top:6px'>РАЗМЕР</div><input type='range' min='1' max='40' value='5' id='pt-size' style='width:80px'><button class='np-btn' id='pt-eraser' onclick='ptErase(this)' style='margin-top:6px'>Ластик</button><button class='np-btn' onclick='ptSave()' style='margin-top:4px'>💾 PNG</button><button class='np-btn' onclick='ptClear()' style='margin-top:4px'>Очистить</button></div><canvas id='pt-canvas' width='400' height='340'></canvas></div>"}
+function termBody(){return "<div style='display:flex;flex-direction:column;height:100%'><div class='term' id='term-out'></div><div style='display:flex;padding:8px;background:#0c0c0c;border-top:1px solid #333'><span style='color:#0f0;font-family:monospace;font-size:13px'>C:\\Users\\П&gt;&nbsp;</span><input class='term-in' id='term-in' autofocus onkeydown='termExec(event)'></div></div>"}
+
+// === СЕТЕВАЯ ИГРА ===
+var ngCh=null,ngRole="",ngRoom="",ngBoard=["","","","","","","","",""],ngTurn="X",ngOver=false,ngMyScore=0,ngOppScore=0;
+function renderNetGame(){var h="<div class='ng-wrap'><div style='font-size:22px;font-weight:700;text-align:center;margin-bottom:6px'>⚔️ Крестики-нолики</div><div style='font-size:13px;color:#888;text-align:center;margin-bottom:14px'>Игра по сети между вкладками браузера<br>Открой игру во второй вкладке и войди по коду</div><div class='ng-status' id='ng-status'>Статус: не подключено</div><div id='ng-lobby'><div style='display:flex;gap:10px;justify-content:center;margin-bottom:16px'><button class='ng-room-btn' onclick='ngCreate()'>🏠 Создать комнату</button><button class='ng-room-btn' onclick='document.getElementById(\"ng-join-box\").style.display=\"block\"'>🔗 Войти по коду</button></div><div id='ng-join-box' style='display:none;text-align:center;margin-top:12px'><input class='br-input' id='ng-code-input' placeholder='Код комнаты...' style='width:160px;text-align:center;font-size:18px;letter-spacing:2px' onkeydown='if(event.key==\"Enter\")ngJoin()'><button class='game-btn' style='font-size:14px;padding:8px 20px;margin-left:8px' onclick='ngJoin()'>Войти</button></div><div id='ng-host-box' style='display:none;text-align:center;margin-top:12px'><div style='font-size:13px;color:#888;margin-bottom:6px'>Код комнаты:</div><div class='ng-code' id='ng-code-display'>------</div><div style='font-size:13px;color:#888'>Ожидание соперника...</div></div></div><div id='ng-game' style='display:none'><div class='ng-info' id='ng-info'>Ваш ход (X)</div><div style='display:flex;justify-content:center;gap:20px;margin-bottom:12px;font-size:14px'><span>Вы: <b id='ng-my'>0</b></span><span>Соперник: <b id='ng-opp'>0</b></span></div><div class='ng-board' id='ng-board'>";for(var i=0;i<9;i++)h+="<div class='ng-cell' id='ng-c"+i+"' onclick='ngClick("+i+")'></div>";h+="</div><div style='text-align:center;margin-top:14px'><button class='ng-room-btn' onclick='ngReset()'>🔄 Новая партия</button> <button class='ng-room-btn' onclick='ngLeave()'>Выйти</button></div></div></div>";return h}
+function ngInit(){}
+function ngCreate(){ngRoom=String(Math.floor(1000+Math.random()*9000));ngRole="X";ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;if(ngCh)ngCh.close();ngCh=new BroadcastChannel("ng_"+ngRoom);ngCh.onmessage=ngOnMsg;document.getElementById("ng-lobby").style.display="none";document.getElementById("ng-game").style.display="none";document.getElementById("ng-host-box").style.display="block";document.getElementById("ng-code-display").textContent=ngRoom;document.getElementById("ng-status").textContent="Статус: ждём соперника (комната "+ngRoom+")"}
+function ngJoin(){var code=document.getElementById("ng-code-input").value.trim();if(!code||code.length<3)return;ngRoom=code;ngRole="O";ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;if(ngCh)ngCh.close();ngCh=new BroadcastChannel("ng_"+ngRoom);ngCh.onmessage=ngOnMsg;ngCh.postMessage({type:"join"});document.getElementById("ng-lobby").style.display="none";document.getElementById("ng-game").style.display="block";document.getElementById("ng-status").textContent="Статус: подключено (комната "+ngRoom+")";ngUpdateUI()}
+function ngOnMsg(e){var d=e.data;if(d.type==="join"&&ngRole==="X"){document.getElementById("ng-host-box").style.display="none";document.getElementById("ng-game").style.display="block";document.getElementById("ng-status").textContent="Статус: игра идёт (комната "+ngRoom+")";ngCh.postMessage({type:"start"});ngUpdateUI()}if(d.type==="start"&&ngRole==="O")ngUpdateUI();if(d.type==="move"){ngBoard=d.board;ngTurn=d.turn;ngOver=d.over||false;if(d.win)ngHighlight(d.win);if(d.over)ngEndGame(d.winner);else ngUpdateUI()}if(d.type==="reset"){ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;ngClearHighlight();ngUpdateUI()}}
+function ngClick(i){if(ngOver||ngBoard[i]||ngTurn!==ngRole)return;ngBoard[i]=ngRole;ngTurn=ngRole==="X"?"O":"X";var win=ngCheckWin();ngUpdateUI();if(ngCh)ngCh.postMessage({type:"move",board:ngBoard,turn:ngTurn,over:!!win,win:win,winner:win?ngRole:null});if(win)ngEndGame(ngRole)}
+function ngCheckWin(){var w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(var j=0;j<w.length;j++)if(ngBoard[w[j][0]]&&ngBoard[w[j][0]]===ngBoard[w[j][1]]&&ngBoard[w[j][1]]===ngBoard[w[j][2]])return w[j];if(ngBoard.every(function(c){return c}))return"draw";return null}
+function ngHighlight(line){if(line==="draw")return;line.forEach(function(i){var el=document.getElementById("ng-c"+i);if(el)el.classList.add("win")})}
+function ngClearHighlight(){for(var i=0;i<9;i++){var el=document.getElementById("ng-c"+i);if(el)el.classList.remove("win")}}
+function ngEndGame(winner){ngOver=true;var info=document.getElementById("ng-info");if(winner==="draw"){if(info)info.textContent="Ничья!"}else{var me=winner===ngRole;if(me)ngMyScore++;else ngOppScore++;var m=document.getElementById("ng-my"),o=document.getElementById("ng-opp");if(m)m.textContent=ngMyScore;if(o)o.textContent=ngOppScore;if(info)info.textContent=me?"Вы выиграли! 🎉":"Вы проиграли 😕"}}
+function ngUpdateUI(){var info=document.getElementById("ng-info");if(info)info.textContent=ngTurn===ngRole?"Ваш ход ("+ngRole+")":"Ход соперника ("+ngTurn+")";for(var i=0;i<9;i++){var el=document.getElementById("ng-c"+i);if(el){el.textContent=ngBoard[i]||"";el.className="ng-cell"+(ngBoard[i]?" taken "+ngBoard[i].toLowerCase():"")}}}
+function ngReset(){ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;ngClearHighlight();ngUpdateUI();if(ngCh)ngCh.postMessage({type:"reset"})}
+function ngLeave(){if(ngCh){ngCh.close();ngCh=null}ngRole="";ngRoom="";var g=document.getElementById("ng-game"),l=document.getElementById("ng-lobby"),hb=document.getElementById("ng-host-box");if(g)g.style.display="none";if(hb)hb.style.display="none";if(l)l.style.display="block";var s=document.getElementById("ng-status");if(s)s.textContent="Статус: не подключено"}
 
 // === MICROSOFT STORE ===
-var msApps=[
-  {n:"Paint 3D",i:"🎨",d:"Рисование в 3D",p:"Бесплатно",sz:"45 МБ"},
-  {n:"Photos",i:"🖼️",d:"Просмотр фото",p:"Бесплатно",sz:"28 МБ"},
-  {n:"Calculator Plus",i:"🧮",d:"Расширенный калькулятор",p:"Бесплатно",sz:"12 МБ"},
-  {n:"Sticky Notes",i:"📝",d:"Заметки на рабочем столе",p:"Бесплатно",sz:"8 МБ"},
-  {n:"Xbox Game Bar",i:"🎮",d:"Игровой оверлей",p:"Бесплатно",sz:"34 МБ"},
-  {n:"Spotify",i:"🎵",d:"Музыка для всех",p:"Бесплатно",sz:"65 МБ"},
-  {n:"WhatsApp",i:"💬",d:"Мессенджер",p:"Бесплатно",sz:"52 МБ"},
-  {n:"VS Code",i:"💻",d:"Редактор кода",p:"Бесплатно",sz:"89 МБ"},
-  {n:"Netflix",i:"🎬",d:"Фильмы и сериалы",p:"Бесплатно",sz:"42 МБ"},
-  {n:"Zoom",i:"📹",d:"Видеозвонки",p:"Бесплатно",sz:"38 МБ"}
-];
-function renderMsStore(){
-  var h="<div style='display:flex;height:100%;flex-direction:column'>";
-  h+="<div style='padding:14px 20px;background:#f5f7fa;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:14px'>";
-  h+="<span style='font-size:22px;font-weight:700;color:#0078d7'>🏪 Microsoft Store</span>";
-  h+="<input class='br-input' style='width:280px' placeholder='Поиск приложений...' id='ms-search' onkeydown='if(event.key===\"Enter\")msSearch()'>";
-  h+="<button class='np-btn' onclick='msSearch()'>🔍</button></div>";
-  h+="<div style='flex:1;padding:20px;overflow:auto'>";
-  h+="<div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px' id='ms-grid'>";
-  msApps.forEach(function(a,idx){
-    h+="<div class='store-card' id='ms-card-"+idx+"'>";
-    h+="<span style='font-size:42px'>"+a.i+"</span>";
-    h+="<div style='margin:8px 0 4px;font-weight:600;text-align:center'>"+a.n+"</div>";
-    h+="<div style='font-size:12px;color:#888;margin-bottom:4px'>"+a.d+"</div>";
-    h+="<div style='font-size:11px;color:#aaa;margin-bottom:10px'>"+a.sz+" • "+a.p+"</div>";
-    h+="<button class='np-btn' style='background:#0078d7;color:#fff;padding:8px 20px;width:100%' id='ms-btn-"+idx+"' onclick='msDownload("+idx+")'>Скачать</button>";
-    h+="<div class='dl-bar' id='ms-dl-"+idx+"'><div class='dl-fill' id='ms-fill-"+idx+"'></div></div>";
-    h+="</div>"});
-  h+="</div></div></div>";
-  return h
-}
-function msSearch(){var q=document.getElementById("ms-search").value.toLowerCase();
-  msApps.forEach(function(a,idx){var card=document.getElementById("ms-card-"+idx);
-  if(card){card.style.display=a.n.toLowerCase().includes(q)||a.d.toLowerCase().includes(q)?"flex":"none"}})}
-function msDownload(idx){var btn=document.getElementById("ms-btn-"+idx),bar=document.getElementById("ms-dl-"+idx),fill=document.getElementById("ms-fill-"+idx);
-  if(!btn||btn.dataset.dl==="1")return;btn.dataset.dl="1";btn.textContent="Загрузка...";btn.style.background="#888";bar.classList.add("show");
-  var prog=0;var iv=setInterval(function(){prog+=Math.random()*18+6;if(prog>=100){prog=100;clearInterval(iv);
-    btn.textContent="Установлено ✓";btn.style.background="#107c10";fill.style.width="100%";
-    setTimeout(function(){btn.textContent="Открыть";btn.style.background="#0078d7";btn.onclick=function(){openApp(msApps[idx].n.includes("Paint")?"paint":msApps[idx].n.includes("Calculator")?"calc":"notepad")}},800)}
-  else{fill.style.width=prog+"%";btn.textContent=Math.round(prog)+"%"}},250)}
+var msApps=[{n:"Spotify",i:"🎵",d:"Музыка",p:"Бесплатно",sz:"65 МБ",bg:"#1db954",appId:"spotify"},{n:"WhatsApp",i:"💬",d:"Мессенджер",p:"Бесплатно",sz:"52 МБ",bg:"#25d366",appId:"whatsapp"},{n:"VS Code",i:"💻",d:"Редактор кода",p:"Бесплатно",sz:"89 МБ",bg:"#007acc",appId:"vscode"},{n:"Netflix",i:"🎬",d:"Фильмы",p:"Бесплатно",sz:"42 МБ",bg:"#e50914",appId:"netflix"},{n:"Zoom",i:"📹",d:"Видеозвонки",p:"Бесплатно",sz:"38 МБ",bg:"#2d8cff",appId:"zoom"},{n:"Paint 3D",i:"🎨",d:"Рисование",p:"Бесплатно",sz:"45 МБ",bg:"#0078d7",appId:"paint3d"},{n:"Photos",i:"🖼️",d:"Фото",p:"Бесплатно",sz:"28 МБ",bg:"#ff6b6b",appId:"photos"},{n:"Sticky Notes",i:"📝",d:"Заметки",p:"Бесплатно",sz:"8 МБ",bg:"#fdb44b",appId:"stickynotes"},{n:"Calculator Plus",i:"🧮",d:"Калькулятор",p:"Бесплатно",sz:"12 МБ",bg:"#333",appId:"calcplus"},{n:"Xbox Game Bar",i:"🎮",d:"Оверлей",p:"Бесплатно",sz:"34 МБ",bg:"#107c10",appId:"xboxbar"}];
+function renderMsStore(){var h="<div style='display:flex;height:100%;flex-direction:column'><div style='padding:14px 20px;background:#f5f7fa;border-bottom:1px solid rgba(0,0,0,.06);display:flex;align-items:center;gap:14px'><span style='font-size:22px;font-weight:700;color:#0078d7'>🏪 Microsoft Store</span><input class='br-input' style='width:280px' placeholder='Поиск приложений...' id='ms-search' onkeydown='if(event.key==\"Enter\")msSearch()'><button class='np-btn' onclick='msSearch()'>🔍</button></div><div style='flex:1;padding:20px;overflow:auto'><div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px'>";msApps.forEach(function(a,idx){var isInst=installedApps.indexOf(a.appId)>=0;h+="<div class='store-card' id='ms-card-"+idx+"'><span style='font-size:42px'>"+a.i+"</span><div style='margin:8px 0 4px;font-weight:600;text-align:center'>"+a.n+"</div><div style='font-size:12px;color:#888;margin-bottom:4px'>"+a.d+"</div><div style='font-size:11px;color:#aaa;margin-bottom:10px'>"+a.sz+" • "+a.p+"</div><button class='np-btn' style='background:"+(isInst?"#107c10":"#0078d7")+";color:#fff;padding:8px 20px;width:100%' id='ms-btn-"+idx+"' onclick='msDownload("+idx+")'>"+(isInst?"Открыть ✓":"Скачать")+"</button><div class='dl-bar' id='ms-dl-"+idx+"'><div class='dl-fill' id='ms-fill-"+idx+"'></div></div></div>"});h+="</div></div></div>";return h}
+function msSearch(){var q=document.getElementById("ms-search").value.toLowerCase();msApps.forEach(function(a,idx){var c=document.getElementById("ms-card-"+idx);if(c)c.style.display=a.n.toLowerCase().includes(q)||a.d.toLowerCase().includes(q)?"flex":"none"})}
+function msDownload(idx){var a=msApps[idx],btn=document.getElementById("ms-btn-"+idx);if(installedApps.indexOf(a.appId)>=0){openApp(a.appId);return}if(!btn||btn.dataset.dl==="1")return;btn.dataset.dl="1";btn.textContent="Загрузка...";btn.style.background="#888";var bar=document.getElementById("ms-dl-"+idx),fill=document.getElementById("ms-fill-"+idx);bar.classList.add("show");var prog=0,iv=setInterval(function(){prog+=Math.random()*18+6;if(prog>=100){prog=100;clearInterval(iv);fill.style.width="100%";btn.textContent="Установка...";btn.style.background="#555";setTimeout(function(){addDesktopIcon(a.appId,a.i,a.bg,a.n);btn.textContent="Открыть ✓";btn.style.background="#107c10";btn.onclick=function(){openApp(a.appId)}},600)}else{fill.style.width=prog+"%";btn.textContent=Math.round(prog)+"%"}},250)}
 
 // === STEAM ===
-var steamGames=[
-  {n:"Portal 2",i:"🌀",d:"Головоломка",p:"Бесплатно",sz:"12 ГБ"},
-  {n:"Half-Life 2",i:"🔫",d:"Шутер",p:"Бесплатно",sz:"8 ГБ"},
-  {n:"Counter-Strike 2",i:"🗡️",d:"Шутер",p:"Бесплатно",sz:"15 ГБ"},
-  {n:"Left 4 Dead 2",i:"🧟",d:"Зомби-шутер",p:"$9.99",sz:"13 ГБ"},
-  {n:"Team Fortress 2",i:"🎖️",d:"Командный шутер",p:"Бесплатно",sz:"11 ГБ"},
-  {n:"Garry's Mod",i:"🛠️",d:"Песочница",p:"$9.99",sz:"5 ГБ"},
-  {n:"Dota 2",i:"⚔️",d:"MOBA",p:"Бесплатно",sz:"20 ГБ"},
-  {n:"Rust",i:"🔨",d:"Выживание",p:"$39.99",sz:"18 ГБ"},
-  {n:"Terraria",i:"🌳",d:"Приключение",p:"$9.99",sz:"1 ГБ"},
-  {n:"Stardew Valley",i:"🌾",d:"Симулятор фермы",p:"$14.99",sz:"1 ГБ"}
-];
-function renderSteam(){
-  var h="<div style='display:flex;height:100%;flex-direction:column'>";
-  h+="<div style='padding:14px 20px;background:#1b2838;color:#fff;display:flex;align-items:center;gap:14px'>";
-  h+="<span style='font-size:22px;font-weight:700'>🎮 Steam</span>";
-  h+="<input class='br-input' style='width:300px;background:#2e3d4f;color:#fff;border-color:#3a4b5d' placeholder='Поиск игр...' id='st-search' onkeydown='if(event.key===\"Enter\")stSearch()'>";
-  h+="<button class='np-btn' style='background:#fff;color:#1b2838' onclick='stSearch()'>🔍</button>";
-  h+="<span style='margin-left:auto;font-size:13px;color:#8b94a0'>Пользователь</span></div>";
-  h+="<div style='flex:1;padding:20px;overflow:auto;background:#0f1115'>";
-  h+="<div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px' id='st-grid'>";
-  steamGames.forEach(function(g,idx){
-    h+="<div class='steam-card' id='st-card-"+idx+"'>";
-    h+="<span style='font-size:52px'>"+g.i+"</span>";
-    h+="<div style='margin:10px 0 4px;font-weight:600;text-align:center'>"+g.n+"</div>";
-    h+="<div style='font-size:12px;color:#8b94a0;margin-bottom:2px'>"+g.d+"</div>";
-    h+="<div style='font-size:11px;color:#66c0f4;margin-bottom:10px'>"+g.sz+" • "+g.p+"</div>";
-    h+="<button class='np-btn' style='background:#00a2ff;color:#000;padding:8px 20px;width:100%;font-weight:700' id='st-btn-"+idx+"' onclick='stDownload("+idx+")'>Установить</button>";
-    h+="<div class='dl-bar' id='st-dl-"+idx+"'><div class='dl-fill' id='st-fill-"+idx+"' style='background:#00a2ff'></div></div>";
-    h+="</div>"});
-  h+="</div></div></div>";
-  return h
-}
-function stSearch(){var q=document.getElementById("st-search").value.toLowerCase();
-  steamGames.forEach(function(g,idx){var card=document.getElementById("st-card-"+idx);
-  if(card){card.style.display=g.n.toLowerCase().includes(q)||g.d.toLowerCase().includes(q)?"flex":"none"}})}
-function stDownload(idx){var btn=document.getElementById("st-btn-"+idx),bar=document.getElementById("st-dl-"+idx),fill=document.getElementById("st-fill-"+idx);
-  if(!btn||btn.dataset.dl==="1")return;btn.dataset.dl="1";btn.textContent="Установка...";btn.style.background="#555";bar.classList.add("show");
-  var prog=0;var iv=setInterval(function(){prog+=Math.random()*12+4;if(prog>=100){prog=100;clearInterval(iv);
-    btn.textContent="Играть ▶";btn.style.background="#107c10";btn.style.color="#fff";fill.style.width="100%"}
-  else{fill.style.width=prog+"%";btn.textContent=Math.round(prog)+"%"}},300)}
+var steamGames=[{n:"Portal 2",i:"🌀",d:"Головоломка",p:"Бесплатно",sz:"12 ГБ",bg:"#ff6600",appId:"game_portal2"},{n:"Half-Life 2",i:"🔫",d:"Шутер",p:"Бесплатно",sz:"8 ГБ",bg:"#ff4400",appId:"game_hl2"},{n:"Counter-Strike 2",i:"🗡️",d:"Шутер",p:"Бесплатно",sz:"15 ГБ",bg:"#f5a623",appId:"game_cs2"},{n:"Left 4 Dead 2",i:"🧟",d:"Зомби",p:"$9.99",sz:"13 ГБ",bg:"#4a4a4a",appId:"game_l4d2"},{n:"Team Fortress 2",i:"🎖️",d:"Шутер",p:"Бесплатно",sz:"11 ГБ",bg:"#b8383b",appId:"game_tf2"},{n:"Garry's Mod",i:"🛠️",d:"Песочница",p:"$9.99",sz:"5 ГБ",bg:"#88a832",appId:"game_gmod"},{n:"Dota 2",i:"⚔️",d:"MOBA",p:"Бесплатно",sz:"20 ГБ",bg:"#8b0000",appId:"game_dota2"},{n:"Rust",i:"🔨",d:"Выживание",p:"$39.99",sz:"18 ГБ",bg:"#cd412b",appId:"game_rust"},{n:"Terraria",i:"🌳",d:"Приключение",p:"$9.99",sz:"1 ГБ",bg:"#2d8a4e",appId:"game_terraria"},{n:"Stardew Valley",i:"🌾",d:"Ферма",p:"$14.99",sz:"1 ГБ",bg:"#e8a44c",appId:"game_stardew"}];
+function renderSteam(){var h="<div style='display:flex;height:100%;flex-direction:column'><div style='padding:14px 20px;background:#1b2838;color:#fff;display:flex;align-items:center;gap:14px'><span style='font-size:22px;font-weight:700'>🎮 Steam</span><input class='br-input' style='width:300px;background:#2e3d4f;color:#fff;border-color:#3a4b5d' placeholder='Поиск игр...' id='st-search' onkeydown='if(event.key==\"Enter\")stSearch()'><button class='np-btn' style='background:#fff;color:#1b2838' onclick='stSearch()'>🔍</button><span style='margin-left:auto;font-size:13px;color:#8b94a0'>Пользователь</span></div><div style='flex:1;padding:20px;overflow:auto;background:#0f1115'><div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px'>";steamGames.forEach(function(g,idx){var isInst=installedApps.indexOf(g.appId)>=0;h+="<div class='steam-card' id='st-card-"+idx+"'><span style='font-size:52px'>"+g.i+"</span><div style='margin:10px 0 4px;font-weight:600;text-align:center'>"+g.n+"</div><div style='font-size:12px;color:#8b94a0;margin-bottom:2px'>"+g.d+"</div><div style='font-size:11px;color:#66c0f4;margin-bottom:10px'>"+g.sz+" • "+g.p+"</div><button class='np-btn' style='background:"+(isInst?"#107c10":"#00a2ff")+";color:"+(isInst?"#fff":"#000")+";padding:8px 20px;width:100%;font-weight:700' id='st-btn-"+idx+"' onclick='stDownload("+idx+")'>"+(isInst?"Играть ▶":"Установить")+"</button><div class='dl-bar' id='st-dl-"+idx+"'><div class='dl-fill' id='st-fill-"+idx+"' style='background:#00a2ff'></div></div></div>"});h+="</div></div></div>";return h}
+function stSearch(){var q=document.getElementById("st-search").value.toLowerCase();steamGames.forEach(function(g,idx){var c=document.getElementById("st-card-"+idx);if(c)c.style.display=g.n.toLowerCase().includes(q)||g.d.toLowerCase().includes(q)?"flex":"none"})}
+function stDownload(idx){var g=steamGames[idx],btn=document.getElementById("st-btn-"+idx);if(installedApps.indexOf(g.appId)>=0){openApp(g.appId);return}if(!btn||btn.dataset.dl==="1")return;btn.dataset.dl="1";btn.textContent="Установка...";btn.style.background="#555";var bar=document.getElementById("st-dl-"+idx),fill=document.getElementById("st-fill-"+idx);bar.classList.add("show");var prog=0,iv=setInterval(function(){prog+=Math.random()*12+4;if(prog>=100){prog=100;clearInterval(iv);fill.style.width="100%";btn.textContent="Распаковка...";setTimeout(function(){addDesktopIcon(g.appId,g.i,g.bg,g.n);btn.textContent="Играть ▶";btn.style.background="#107c10";btn.style.color="#fff";btn.onclick=function(){openApp(g.appId)}},600)}else{fill.style.width=prog+"%";btn.textContent=Math.round(prog)+"%"}},300)}
+
+// === УСТАНОВЛЕННЫЕ ПРИЛОЖЕНИЯ ===
+function renderInstalledApp(id){var a=apps[id];if(id==="spotify")return renderSpotify();if(id==="whatsapp")return renderWhatsApp();if(id==="vscode")return renderVSCode();if(id==="netflix")return renderNetflix();if(id==="zoom")return renderZoom();if(id==="paint3d")return ptBody();if(id==="photos")return renderPhotos();if(id==="stickynotes")return renderStickyNotes();if(id==="calcplus")return calcBody();if(id==="xboxbar")return renderXboxBar();if(id.indexOf("game_")===0)return renderGame(a.t,a.i);return "<div class='app-win'><div style='font-size:22px;font-weight:700'>"+a.i+" "+a.t+"</div><p style='margin-top:12px;color:#888'>Приложение установлено и готово.</p></div>"}
+function initInstalledApp(id){if(id==="whatsapp"){var i=document.getElementById("wa-input");if(i)i.focus()}}
+function renderSpotify(){return "<div class='app-win' style='background:#121212'><div class='music-player'><div class='music-cover'>🎵</div><div class='music-track' id='sp-track'>Midnight City</div><div class='music-artist' id='sp-artist'>M83</div><div class='music-progress'><div class='music-progress-fill' id='sp-prog'></div></div><div style='display:flex;justify-content:space-between;font-size:11px;color:#888;margin-bottom:10px'><span id='sp-cur'>0:00</span><span id='sp-dur'>4:03</span></div><div class='music-controls'><button class='music-btn' onclick='spPrev()'>⏮</button><button class='music-btn play' id='sp-play' onclick='spToggle()'>▶</button><button class='music-btn' onclick='spNext()'>⏭</button></div></div></div>"}
+var spTracks=[{t:"Midnight City",a:"M83",d:243},{t:"Take on Me",a:"a-ha",d:225},{t:"Blinding Lights",a:"The Weeknd",d:200}],spIdx=0,spPlaying=false,spTimer=null,spSec=0;
+function spToggle(){var btn=document.getElementById("sp-play");spPlaying=!spPlaying;if(spPlaying){btn.textContent="⏸";spTimer=setInterval(function(){spSec++;var d=spTracks[spIdx].d;var pf=document.getElementById("sp-prog");if(pf)pf.style.width=(spSec/d*100)+"%";var c=document.getElementById("sp-cur");if(c)c.textContent=Math.floor(spSec/60)+":"+String(spSec%60).padStart(2,"0");if(spSec>=d)spNext()},1000)}else{btn.textContent="▶";clearInterval(spTimer)}}
+function spNext(){spSec=0;spIdx=(spIdx+1)%spTracks.length;spUpdate();if(spPlaying){clearInterval(spTimer);spToggle()}}
+function spPrev(){spSec=0;spIdx=(spIdx-1+spTracks.length)%spTracks.length;spUpdate();if(spPlaying){clearInterval(spTimer);spToggle()}}
+function spUpdate(){var t=spTracks[spIdx];var e1=document.getElementById("sp-track"),e2=document.getElementById("sp-artist"),e3=document.getElementById("sp-dur"),pf=document.getElementById("sp-prog"),c=document.getElementById("sp-cur");if(e1)e1.textContent=t.t;if(e2)e2.textContent=t.a;if(e3)e3.textContent=Math.floor(t.d/60)+":"+String(t.d%60).padStart(2,"0");if(pf)pf.style.width="0%";if(c)c.textContent="0:00"}
+function renderWhatsApp(){return "<div class='chat-win'><div style='padding:12px 16px;background:#075e54;color:#fff;font-size:16px;font-weight:600'>💬 WhatsApp</div><div class='chat-msgs' id='wa-msgs'><div class='chat-bubble them'>Привет! 👋</div><div class='chat-bubble them'>Видел новую Windows 12?</div></div><div class='chat-input-row'><input class='chat-input' id='wa-input' placeholder='Сообщение...' onkeydown='if(event.key==\"Enter\")waSend()'><button class='chat-send' onclick='waSend()'>➤</button></div></div>"}
+var waReplies=["Круто! 😎","Согласен!","Ха-ха 😂","Ок 👍","Ага!","Точно!"];
+function waSend(){var i=document.getElementById("wa-input"),m=document.getElementById("wa-msgs");if(!i||!i.value.trim())return;var b=document.createElement("div");b.className="chat-bubble me";b.textContent=i.value;m.appendChild(b);i.value="";m.scrollTop=m.scrollHeight;setTimeout(function(){var r=document.createElement("div");r.className="chat-bubble them";r.textContent=waReplies[Math.floor(Math.random()*waReplies.length)];m.appendChild(r);m.scrollTop=m.scrollHeight},800)}
+function renderVSCode(){return "<div class='code-editor'><div class='code-tabs'><div class='code-tab act'>main.js</div><div class='code-tab'>style.css</div><div class='code-tab'>index.html</div></div><textarea class='code-area' spellcheck='false'>// Welcome to VS Code\nfunction hello() {\n  console.log('Hello, World!');\n}\nhello();</textarea><div style='display:flex;gap:8px;padding:8px;background:#252526'><button class='np-btn' style='background:#007acc;color:#fff' onclick='alert(\"✓ Выполнено\")'>▶ Запустить</button></div></div>"}
+function renderNetflix(){var shows=[{n:"Тьма",c:"#1a1a2e",i:"🌑"},{n:"Ведьмак",c:"#2d1b00",i:"⚔️"},{n:"Очень странные дела",c:"#8b0000",i:"🌀"},{n:"Королева гамбита",c:"#2a1a3e",i:"♟️"},{n:"Бриджертоны",c:"#4a1a3e",i:"💃"},{n:"Локи",c:"#1a3a1a",i:"🦎"}];var h="<div style='background:#141414;min-height:100%;color:#fff;padding:16px 20px'><div style='font-size:28px;font-weight:700;margin-bottom:16px'><span style='color:#e50914'>N</span> Netflix</div><div class='netflix-grid'>";shows.forEach(function(s){h+="<div class='netflix-card' onclick='alert(\"Воспроизведение: "+s.n+"\")'><div class='netflix-thumb' style='background:"+s.c+"'>"+s.i+"</div><div class='netflix-name'>"+s.n+"</div></div>"});h+="</div></div>";return h}
+function renderZoom(){return "<div class='zoom-win'><div style='padding:12px 16px;background:#2d8cff;font-size:16px;font-weight:600'>📹 Zoom</div><div class='zoom-main'><div class='zoom-video'>П</div></div><div class='zoom-controls'><button class='zoom-btn'>🎤</button><button class='zoom-btn'>📷</button><button class='zoom-btn'>💬</button><button class='zoom-btn end' onclick='closeWin(\"zoom\")'>📞</button></div></div>"}
+function renderPhotos(){var h="<div style='padding:20px'><div style='font-size:20px;font-weight:700;margin-bottom:16px'>🖼️ Фото</div><div style='display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px'>";["🌅","🏔️","🌊","🌸","🏙️","🐶","🍕","🎮","🚗","✈️","🌈","🌳"].forEach(function(p){h+="<div style='aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:48px;background:linear-gradient(135deg,#e0e7ff,#f0f9ff);cursor:pointer'>"+p+"</div>"});h+="</div></div>";return h}
+function renderStickyNotes(){return "<div style='padding:16px;height:100%;background:#fffbe6'><textarea style='width:100%;height:100%;border:none;resize:none;font-size:16px;background:transparent;outline:none' placeholder='Заметка...'>📌 Покупки:\n— Молоко\n— Хлеб\n— Кофе</textarea></div>"}
+function renderXboxBar(){return "<div style='padding:20px;background:#107c10;color:#fff;height:100%'><div style='font-size:22px;font-weight:700;margin-bottom:16px'>🎮 Xbox Game Bar</div><div style='display:grid;grid-template-columns:1fr 1fr;gap:12px'><div style='background:rgba(255,255,255,.1);border-radius:10px;padding:14px'>⏱️ Время: <b>0:00</b></div><div style='background:rgba(255,255,255,.1);border-radius:10px;padding:14px'>📊 CPU: <b>42%</b> GPU: <b>67%</b></div><div style='background:rgba(255,255,255,.1);border-radius:10px;padding:14px'>🔊 Громкость: <b>"+volLevel+"%</b></div><div style='background:rgba(255,255,255,.1);border-radius:10px;padding:14px'>🎥 Запись: <b style='color:#ff6b6b'>● REC</b></div></div></div>"}
+
+// === ИГРЫ STEAM ===
+function renderGame(name,icon){return "<div class='game-arena'><div style='font-size:64px;margin-bottom:8px'>"+icon+"</div><div style='font-size:28px;font-weight:700;margin-bottom:8px'>"+name+"</div><div class='game-score' id='game-score'>Счёт: 0</div><div style='font-size:14px;color:#888;margin-bottom:20px' id='game-msg'>Нажми кнопку!</div><button class='game-btn' id='game-start' onclick='gameStart()'>▶ Играть</button><div id='game-area' style='margin-top:20px;width:300px;height:200px;border:2px solid #333;border-radius:12px;position:relative;overflow:hidden;display:none'></div></div>"}
+var gameScore=0,gameActive=false,gameInterval=null;
+function gameStart(){gameScore=0;gameActive=true;var s=document.getElementById("game-score"),msg=document.getElementById("game-msg"),btn=document.getElementById("game-start"),area=document.getElementById("game-area");if(s)s.textContent="Счёт: 0";if(msg)msg.textContent="Лови цели!";if(btn)btn.style.display="none";if(area)area.style.display="block";gameInterval=setInterval(function(){if(!gameActive||!area)return;area.innerHTML="";var t=document.createElement("div");t.style.cssText="position:absolute;width:40px;height:40px;border-radius:50%;background:"+(["#ff6b6b","#4ecdc4","#ffe66d","#a8e6cf"][Math.floor(Math.random()*4)])+";cursor:pointer;left:"+Math.random()*(area.clientWidth-40)+"px;top:"+Math.random()*(area.clientHeight-40)+"px";t.onclick=function(){gameScore++;var sc=document.getElementById("game-score");if(sc)sc.textContent="Счёт: "+gameScore;this.remove()};area.appendChild(t);setTimeout(function(){if(t&&t.parentNode)t.remove()},1500)},800);setTimeout(function(){gameActive=false;clearInterval(gameInterval);if(msg)msg.textContent="Игра окончена! Счёт: "+gameScore;if(btn){btn.style.display="block";btn.textContent="↻ Заново"}if(area)area.style.display="none"},20000)}
 
 // === УПРАВЛЕНИЕ ОКНАМИ ===
 function bringFront(w){w.style.zIndex=++zc}
-function closeWin(id){if(wins[id]){wins[id].remove();delete wins[id];updateTB()}}
+function closeWin(id){if(wins[id]){if(id==="spotify"&&spTimer)clearInterval(spTimer);if(id==="netgame")ngLeave();wins[id].remove();delete wins[id];updateTB()}}
 function minWin(id){if(wins[id])wins[id].classList.add("minimized")}
-function maxWin(id){var w=wins[id];if(!w)return;
-  if(w.dataset.m==="1"){w.style.width=apps[id].w+"px";w.style.height=apps[id].h+"px";w.style.left=(80+Math.random()*100)+"px";w.style.top=(30+Math.random()*50)+"px";w.style.position="absolute";w.style.border="1px solid rgba(0,0,0,.1)";w.dataset.m="0"}
-  else{w.style.position="fixed";w.style.left="0";w.style.top="0";w.style.width="100vw";w.style.height="100vh";w.style.border="none";w.style.boxShadow="none";w.dataset.m="1"}}
-function dragWin(e,id){var w=wins[id];if(!w||e.target.classList.contains("win-btn")||w.dataset.m==="1")return;
-  var ox=e.clientX-w.offsetLeft,oy=e.clientY-w.offsetTop,dg=true;bringFront(w);
-  function mv(e){if(dg){w.style.left=(e.clientX-ox)+"px";w.style.top=Math.max(0,e.clientY-oy)+"px"}}
-  function up(){dg=false;document.removeEventListener("mousemove",mv);document.removeEventListener("mouseup",up)}
-  document.addEventListener("mousemove",mv);document.addEventListener("mouseup",up)}
-function updateTB(){var t=document.getElementById("tb-apps");t.innerHTML="";
-  for(var id in wins){var a=apps[id],b=document.createElement("button");b.className="app-btn active";b.innerHTML=a.i;b.title=a.t;
-  b.onclick=(function(id){return function(){var w=wins[id];if(w.classList.contains("minimized")){w.classList.remove("minimized");bringFront(w)}else w.classList.add("minimized")}})(id);t.appendChild(b)}}
+function maxWin(id){var w=wins[id];if(!w)return;if(w.dataset.m==="1"){w.style.width=apps[id].w+"px";w.style.height=apps[id].h+"px";w.style.left=(80+Math.random()*100)+"px";w.style.top=(30+Math.random()*50)+"px";w.style.position="absolute";w.style.border="1px solid rgba(0,0,0,.1)";w.dataset.m="0"}else{w.style.position="fixed";w.style.left="0";w.style.top="0";w.style.width="100vw";w.style.height="100vh";w.style.border="none";w.style.boxShadow="none";w.dataset.m="1"}}
+function dragWin(e,id){var w=wins[id];if(!w||e.target.classList.contains("win-btn")||w.dataset.m==="1")return;var ox=e.clientX-w.offsetLeft,oy=e.clientY-w.offsetTop,dg=true;bringFront(w);function mv(e){if(dg){w.style.left=(e.clientX-ox)+"px";w.style.top=Math.max(0,e.clientY-oy)+"px"}}function up(){dg=false;document.removeEventListener("mousemove",mv);document.removeEventListener("mouseup",up)}document.addEventListener("mousemove",mv);document.addEventListener("mouseup",up)}
+function updateTB(){var t=document.getElementById("tb-apps");t.innerHTML="";for(var id in wins){var a=apps[id],b=document.createElement("button");b.className="app-btn active";b.innerHTML=a.i;b.title=a.t;b.onclick=(function(id){return function(){var w=wins[id];if(w.classList.contains("minimized")){w.classList.remove("minimized");bringFront(w)}else w.classList.add("minimized")}})(id);t.appendChild(b)}}
 
-// === ТРЕЙ-ПАНЕЛИ ===
-function toggleTrayPanel(type){
-  var panel=document.getElementById("tray-panel"),content=document.getElementById("tp-content");
-  if(panel.classList.contains("open")&&panel.dataset.type===type){panel.classList.remove("open");return}
-  panel.dataset.type=type;panel.classList.add("open");
-  if(type==="vol")content.innerHTML=renderVol();
-  else if(type==="cal")content.innerHTML=renderCal();
-  else if(type==="wifi")content.innerHTML=renderWifi();
-  else if(type==="bat")content.innerHTML=renderBat();
-  if(type==="vol"){var s=document.getElementById("vol-slider");if(s)s.oninput=function(){volLevel=this.value;document.getElementById("vol-val").textContent=this.value+"%";document.getElementById("tray-vol").textContent=this.value<1?"🔇":this.value<50?"🔈":"🔊"};var b=document.getElementById("bri-slider");if(b)b.oninput=function(){brightLevel=this.value;document.getElementById("bri-val").textContent=this.value+"%"}}
-  if(type==="cal"){renderCalDays()}}
+// === ТРЕЙ ===
+function toggleTrayPanel(type){var p=document.getElementById("tray-panel"),c=document.getElementById("tp-content");if(p.classList.contains("open")&&p.dataset.type===type){p.classList.remove("open");return}p.dataset.type=type;p.classList.add("open");if(type==="vol")c.innerHTML=renderVol();else if(type==="cal")c.innerHTML=renderCal();else if(type==="wifi")c.innerHTML=renderWifi();else if(type==="bat")c.innerHTML=renderBat();if(type==="vol"){var s=document.getElementById("vol-slider");if(s)s.oninput=function(){volLevel=this.value;document.getElementById("vol-val").textContent=this.value+"%";document.getElementById("tray-vol").textContent=this.value<1?"🔇":this.value<50?"🔈":"🔊"};var b=document.getElementById("bri-slider");if(b)b.oninput=function(){brightLevel=this.value;document.getElementById("bri-val").textContent=this.value+"%"}}if(type==="cal")renderCalDays()}
 function renderVol(){return "<div class='tp-section'><div class='tp-label'>🔊 Громкость</div><div class='tp-row'><span class='tp-icon'>🔊</span><input type='range' class='tp-slider' id='vol-slider' min='0' max='100' value='"+volLevel+"'><span class='tp-val' id='vol-val'>"+volLevel+"%</span></div></div><div class='tp-section'><div class='tp-label'>☀️ Яркость</div><div class='tp-row'><span class='tp-icon'>☀️</span><input type='range' class='tp-slider' id='bri-slider' min='10' max='100' value='"+brightLevel+"'><span class='tp-val' id='bri-val'>"+brightLevel+"%</span></div></div><div class='tp-section'><div class='tp-btns'><button class='tp-btn' onclick='toggleNight()'>🌙 Ночной свет</button><button class='tp-btn' onclick='toggleAir()'>✈️ В самолёте</button></div></div>"}
 function renderCal(){return "<div class='tp-section'><div class='cal-head'><span class='cal-nav' onclick='calPrev()'>‹</span><span id='cal-title'></span><span class='cal-nav' onclick='calNext()'>›</span></div><div class='cal-grid' id='cal-dow'></div><div class='cal-grid' id='cal-days'></div></div><div class='tp-section'><div class='tp-label'>Сегодня</div><div id='cal-today' style='font-size:14px;font-weight:600'></div></div>"}
-function renderWifi(){return "<div class='tp-section'><div class='tp-label'>📶 Сеть</div><div class='tp-row'><span class='tp-icon'>"+(wifiOn?"📶":"✈️")+"</span><span style='font-size:14px'>"+(wifiOn?"Home_Network_5G":"Нет подключения")+"</span></div>"+(wifiOn?"<div class='tp-row'><span class='tp-icon'>⚡</span><span style='font-size:13px;color:#888'>Подключено • Безопасно</span></div>":"")+"</div><div class='tp-section'><div class='tp-btns'><button class='tp-btn' onclick='wifiOn=!wifiOn;toggleTrayPanel(\"wifi\")'>"+(wifiOn?"✈️ В самолёт":"📶 Включить Wi-Fi")+"</button></div></div>"}
-function renderBat(){return "<div class='tp-section'><div class='tp-label'>🔋 Питание</div><div class='tp-row'><span class='tp-icon'>🔋</span><span style='font-size:14px'>"+batLevel+"% — Заряжается</span></div><div style='height:8px;background:#ddd;border-radius:4px;overflow:hidden;margin-top:6px'><div style='width:"+batLevel+"%;height:100%;background:#0078d7'></div></div></div><div class='tp-section'><div class='tp-label'>Режим питания</div><div class='tp-btns'><button class='tp-btn' onclick=\"alert('Сбалансированный')\">⚖️ Сбалансированный</button><button class='tp-btn' onclick=\"alert('Энергосбережение')\">🍃 Энергосбережение</button><button class='tp-btn' onclick=\"alert('Производительность')\">⚡ Производительность</button></div></div>"}
-function toggleNight(){nightOn=!nightOn;if(nightOn){document.body.style.filter="sepia(0.3) brightness(0.9)"}else{document.body.style.filter=""}}
+function renderWifi(){return "<div class='tp-section'><div class='tp-label'>📶 Сеть</div><div class='tp-row'><span class='tp-icon'>"+(wifiOn?"📶":"✈️")+"</span><span style='font-size:14px'>"+(wifiOn?"Home_Network_5G":"Нет подключения")+"</span></div></div><div class='tp-section'><div class='tp-btns'><button class='tp-btn' onclick='wifiOn=!wifiOn;toggleTrayPanel(\"wifi\")'>"+(wifiOn?"✈️ В самолёт":"📶 Включить Wi-Fi")+"</button></div></div>"}
+function renderBat(){return "<div class='tp-section'><div class='tp-label'>🔋 Питание</div><div class='tp-row'><span class='tp-icon'>🔋</span><span style='font-size:14px'>"+batLevel+"% — Заряжается</span></div><div style='height:8px;background:#ddd;border-radius:4px;overflow:hidden;margin-top:6px'><div style='width:"+batLevel+"%;height:100%;background:#0078d7'></div></div></div><div class='tp-section'><div class='tp-label'>Режим питания</div><div class='tp-btns'><button class='tp-btn' onclick=\"alert('Сбалансированный')\">⚖️ Сбалансированный</button><button class='tp-btn' onclick=\"alert('Энергосбережение')\">🍃 Энергосбережение</button></div></div>"}
+function toggleNight(){nightOn=!nightOn;document.body.style.filter=nightOn?"sepia(0.3) brightness(0.9)":""}
 function toggleAir(){wifiOn=false;toggleTrayPanel("wifi")}
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalDays()}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalDays()}
-function renderCalDays(){var months=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-  document.getElementById("cal-title").textContent=months[calMonth]+" "+calYear;
-  var dow=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"],dowEl=document.getElementById("cal-dow");dowEl.innerHTML="";
-  dow.forEach(function(d){var e=document.createElement("div");e.className="cal-dow";e.textContent=d;dowEl.appendChild(e)});
-  var daysEl=document.getElementById("cal-days");daysEl.innerHTML="";
-  var firstDay=new Date(calYear,calMonth,1).getDay();firstDay=firstDay===0?6:firstDay-1;
-  var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
-  var prevMonthDays=new Date(calYear,calMonth,0).getDate();
-  for(var i=0;i<firstDay;i++){var e=document.createElement("div");e.className="cal-day other";e.textContent=prevMonthDays-firstDay+1+i;daysEl.appendChild(e)}
-  var today=new Date();
-  for(var d=1;d<=daysInMonth;d++){var e=document.createElement("div");e.className="cal-day";
-  if(d===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear())e.classList.add("today");
-  e.textContent=d;e.onclick=function(){document.querySelectorAll(".cal-day.today").forEach(function(x){if(x.textContent!=today.getDate())x.classList.remove("today")});this.classList.add("today")};daysEl.appendChild(e)}
-  var td=document.getElementById("cal-today");if(td)td.textContent=today.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+function renderCalDays(){var m=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];var t=document.getElementById("cal-title");if(t)t.textContent=m[calMonth]+" "+calYear;var d=document.getElementById("cal-dow");if(d){d.innerHTML="";["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].forEach(function(x){var e=document.createElement("div");e.className="cal-dow";e.textContent=x;d.appendChild(e)})}var dy=document.getElementById("cal-days");if(!dy)return;dy.innerHTML="";var fd=new Date(calYear,calMonth,1).getDay();fd=fd===0?6:fd-1;var dm=new Date(calYear,calMonth+1,0).getDate();var pm=new Date(calYear,calMonth,0).getDate();for(var i=0;i<fd;i++){var e=document.createElement("div");e.className="cal-day other";e.textContent=pm-fd+1+i;dy.appendChild(e)}var td=new Date();for(var d2=1;d2<=dm;d2++){var e=document.createElement("div");e.className="cal-day";if(d2===td.getDate()&&calMonth===td.getMonth()&&calYear===td.getFullYear())e.classList.add("today");e.textContent=d2;dy.appendChild(e)}var ct=document.getElementById("cal-today");if(ct)ct.textContent=td.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
 
-// === BUBER TUDER ===
+// === БРАУЗЕР ===
 var brHist=[],brHi=-1;
-function brHome(){brHist=[];brHi=-1;var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");
-  if(ad)ad.value="";if(inf)inf.textContent="Домашняя страница";
-  if(f)f.srcdoc="<html><head><style>*{font-family:sans-serif}body{text-align:center;padding:60px 20px;background:linear-gradient(135deg,#f0f4ff,#fff)}h1{font-size:48px;color:#0078d7}input{width:80%;max-width:500px;height:48px;border:2px solid #0078d7;border-radius:24px;font-size:16px;padding:0 20px;outline:none;margin:20px auto;display:block}.links{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}.link{padding:12px 20px;background:#e7f0fc;border-radius:12px;cursor:pointer;font-size:14px}.link:hover{background:#d0e4fa}</style></head><body><h1>Buber Tuder</h1><form onsubmit='window.parent.brGo(this.q.value);return false'><input name='q' placeholder='Поиск или URL...' autofocus></form><div class='links'><div class='link' onclick='window.parent.brGo(\"Иркутск\")'>🏙️ Иркутск</div><div class='link' onclick='window.parent.brGo(\"космос\")'>🚀 Космос</div><div class='link' onclick='window.parent.brGo(\"музыка\")'>🎵 Музыка</div><div class='link' onclick='window.parent.brGo(\"рецепты\")'>🍕 Рецепты</div><div class='link' onclick='window.parent.brNav(\"https://example.com\")'>🌐 Example.com</div></div></body></html>"}
+function brHome(){brHist=[];brHi=-1;var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");if(ad)ad.value="";if(inf)inf.textContent="Домашняя страница";if(f)f.srcdoc="<html><head><style>*{font-family:sans-serif}body{text-align:center;padding:60px;background:linear-gradient(135deg,#f0f4ff,#fff)}h1{font-size:48px;color:#0078d7}input{width:80%;max-width:500px;height:48px;border:2px solid #0078d7;border-radius:24px;font-size:16px;padding:0 20px;outline:none;margin:20px auto;display:block}.links{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}.link{padding:12px 20px;background:#e7f0fc;border-radius:12px;cursor:pointer;font-size:14px}.link:hover{background:#d0e4fa}</style></head><body><h1>Buber Tuder</h1><form onsubmit='window.parent.brGo(this.q.value);return false'><input name='q' placeholder='Поиск или URL...' autofocus></form><div class='links'><div class='link' onclick='window.parent.brGo(\"Иркутск\")'>🏙️ Иркутск</div><div class='link' onclick='window.parent.brGo(\"космос\")'>🚀 Космос</div><div class='link' onclick='window.parent.brGo(\"музыка\")'>🎵 Музыка</div><div class='link' onclick='window.parent.brNav(\"https://example.com\")'>🌐 Example.com</div></div></body></html>"}
 function brGo(q){q=q.trim();if(!q)return;if(/^https?:\/\//.test(q))brNav(q);else if(/^[\w-]+\.\w{2,}/.test(q)&&!q.includes(" "))brNav("https://"+q);else brSearch(q)}
-function brSearch(q){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");
-  if(ad)ad.value=q;if(inf)inf.textContent="Поиск: "+q;
-  if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px'><div style='border:3px solid #ddd;border-top-color:#0078d7;border-radius:50%;width:40px;height:40px;display:inline-block;animation:sp 1s linear infinite'></div><p style='color:#666;margin-top:16px'>Поиск: "+esc(q)+"...</p><style>@keyframes sp{to{transform:rotate(360deg)}}</style></body></html>";
-  fetch("https://ru.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&format=json&origin=*&srlimit=12").then(function(r){return r.json()}).then(function(d){if(d.query&&d.query.search&&d.query.search.length)brResults(q,d.query.search);else brNoResults(q)}).catch(function(){brError(q,"Ошибка поиска")})}
-function brResults(q,results){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info");if(inf)inf.textContent="Найдено: "+results.length+" (Википедия)";
-  var h="<html><head><style>*{font-family:sans-serif}body{padding:20px 30px}h1{font-size:20px;color:#0078d7;margin-bottom:14px}.r{padding:12px 0;border-bottom:1px solid #eee;cursor:pointer}.r:hover{background:#f5f7fa}.r h3{font-size:15px;color:#1a0dab;margin-bottom:3px}.r p{font-size:13px;color:#444}.r .u{font-size:12px;color:#006621;margin-bottom:2px}.ext{margin-top:20px;padding:14px;background:#f5f7fa;border-radius:10px}.ext a{display:inline-block;padding:8px 14px;background:#0078d7;color:#fff;border-radius:8px;text-decoration:none;margin:4px;font-size:13px}</style></head><body><h1>🔍 Результаты: "+esc(q)+"</h1>";
-  results.forEach(function(r){var t=esc(r.title).replace(/'/g,"\\'");h+="<div class='r' onclick='window.parent.brArticle(\""+t+"\")'><div class='u'>ru.wikipedia.org › wiki › "+encodeURIComponent(r.title)+"</div><h3>"+esc(r.title)+"</h3><p>"+r.snippet.replace(/<[^>]+>/g,"")+"...</p></div>"});
-  h+="<div class='ext'><p style='margin-bottom:8px;font-size:13px'>Искать также:</p><a href='https://www.google.com/search?q="+encodeURIComponent(q)+"' target='_blank'>Google</a><a href='https://yandex.ru/search/?text="+encodeURIComponent(q)+"' target='_blank'>Яндекс</a></div></body></html>";if(f)f.srcdoc=h}
-function brArticle(title){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");
-  if(ad)ad.value=title;if(inf)inf.textContent="Статья: "+title;
-  if(f)f.srcdoc="<html><body style='text-align:center;padding:80px;font-family:sans-serif'><div style='border:3px solid #ddd;border-top-color:#0078d7;border-radius:50%;width:40px;height:40px;display:inline-block;animation:sp 1s linear infinite'></div><p style='color:#666;margin-top:16px'>Загрузка статьи...</p><style>@keyframes sp{to{transform:rotate(360deg)}}</style></body></html>";
-  fetch("https://ru.wikipedia.org/w/api.php?action=parse&page="+encodeURIComponent(title)+"&format=json&origin=*&prop=text&disableeditsection=1&disabletoc=1").then(function(r){return r.json()}).then(function(d){if(d.parse){if(inf)inf.textContent="Статья: "+title;if(f)f.srcdoc="<html><head><base href='https://ru.wikipedia.org/' target='_blank'><style>*{font-family:sans-serif;max-width:100%}body{padding:20px 36px;line-height:1.6}h1{font-size:26px;border-bottom:2px solid #0078d7;padding-bottom:8px;margin-bottom:14px}a{color:#0645ad}img{max-width:100%;border-radius:8px}.mw-editsection{display:none}.reflist{display:none}.ambox{display:none}</style></head><body><h1>"+esc(title)+"</h1>"+d.parse.text["*"]+"</body></html>"}else brError(title,"Статья не найдена")}).catch(function(){brError(title,"Ошибка загрузки")})}
-function brNav(url){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");
-  if(ad)ad.value=url;if(inf)inf.textContent="Загрузка: "+url;if(f){f.removeAttribute("srcdoc");f.src=url}brHist=brHist.slice(0,brHi+1);brHist.push(url);brHi++}
+function brSearch(q){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");if(ad)ad.value=q;if(inf)inf.textContent="Поиск: "+q;if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px'><div style='border:3px solid #ddd;border-top-color:#0078d7;border-radius:50%;width:40px;height:40px;display:inline-block;animation:sp 1s linear infinite'></div><p style='color:#666;margin-top:16px'>Поиск: "+esc(q)+"...</p><style>@keyframes sp{to{transform:rotate(360deg)}}</style></body></html>";fetch("https://ru.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent(q)+"&format=json&origin=*&srlimit=12").then(function(r){return r.json()}).then(function(d){if(d.query&&d.query.search&&d.query.search.length)brResults(q,d.query.search);else brNoResults(q)}).catch(function(){brError(q,"Ошибка")})}
+function brResults(q,results){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info");if(inf)inf.textContent="Найдено: "+results.length;var h="<html><head><style>*{font-family:sans-serif}body{padding:20px 30px}h1{font-size:20px;color:#0078d7;margin-bottom:14px}.r{padding:12px 0;border-bottom:1px solid #eee;cursor:pointer}.r:hover{background:#f5f7fa}.r h3{font-size:15px;color:#1a0dab}.r p{font-size:13px;color:#444}</style></head><body><h1>🔍 Результаты: "+esc(q)+"</h1>";results.forEach(function(r){var t=esc(r.title).replace(/'/g,"\\'");h+="<div class='r' onclick='window.parent.brArticle(\""+t+"\")'><h3>"+esc(r.title)+"</h3><p>"+r.snippet.replace(/<[^>]+>/g,"")+"...</p></div>"});h+="</body></html>";if(f)f.srcdoc=h}
+function brArticle(title){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");if(ad)ad.value=title;if(inf)inf.textContent="Статья: "+title;if(f)f.srcdoc="<html><body style='text-align:center;padding:80px;font-family:sans-serif'><div style='border:3px solid #ddd;border-top-color:#0078d7;border-radius:50%;width:40px;height:40px;display:inline-block;animation:sp 1s linear infinite'></div><p style='color:#666;margin-top:16px'>Загрузка...</p><style>@keyframes sp{to{transform:rotate(360deg)}}</style></body></html>";fetch("https://ru.wikipedia.org/w/api.php?action=parse&page="+encodeURIComponent(title)+"&format=json&origin=*&prop=text&disableeditsection=1&disabletoc=1").then(function(r){return r.json()}).then(function(d){if(d.parse&&f){f.srcdoc="<html><head><base href='https://ru.wikipedia.org/' target='_blank'><style>*{font-family:sans-serif;max-width:100%}body{padding:20px 36px;line-height:1.6}a{color:#0645ad}img{max-width:100%;border-radius:8px}.mw-editsection{display:none}</style></head><body>"+d.parse.text["*"]+"</body></html>"}}).catch(function(){brError(title,"Ошибка")})}
+function brNav(url){var f=document.getElementById("br-frame"),inf=document.getElementById("br-info"),ad=document.getElementById("br-addr");if(ad)ad.value=url;if(inf)inf.textContent="Загрузка: "+url;if(f){f.removeAttribute("srcdoc");f.src=url}brHist=brHist.slice(0,brHi+1);brHist.push(url);brHi++}
 function brBack(){if(brHi>0){brHi--;document.getElementById("br-frame").src=brHist[brHi];document.getElementById("br-addr").value=brHist[brHi]}}
 function brFwd(){if(brHi<brHist.length-1){brHi++;document.getElementById("br-frame").src=brHist[brHi];document.getElementById("br-addr").value=brHist[brHi]}}
 function brReload(){var f=document.getElementById("br-frame");if(f&&f.contentWindow)f.contentWindow.location.reload()}
 function brNew(){var v=document.getElementById("br-addr").value;window.open(v.startsWith("http")?v:"https://ru.wikipedia.org/wiki/"+encodeURIComponent(v),"_blank")}
-function brNoResults(q){var f=document.getElementById("br-frame");if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px;color:#666'><h2>Ничего не найдено</h2><p>По запросу \""+esc(q)+"\" нет результатов.</p></body></html>"}
-function brError(q,msg){var f=document.getElementById("br-frame");if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px;color:#c00'><h2>"+msg+"</h2><p>"+esc(q)+"</p></body></html>"}
+function brNoResults(q){var f=document.getElementById("br-frame");if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px;color:#666'><h2>Ничего не найдено</h2></body></html>"}
+function brError(q,msg){var f=document.getElementById("br-frame");if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px;color:#c00'><h2>"+msg+"</h2></body></html>"}
 
 // === БЛОКНОТ ===
 function npSave(){var t=document.getElementById("np-area");if(!t)return;var b=new Blob([t.value],{type:"text/plain;charset=utf-8"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="документ.txt";a.click()}
@@ -446,70 +417,27 @@ function npOpen(){var i=document.createElement("input");i.type="file";i.accept="
 
 // === КАЛЬКУЛЯТОР ===
 var cv="0",cp=null,co=null,cr=false;
-function calcPress(k){var d=document.getElementById("cd");if(!d)return;
-  if(k>="0"&&k<="9"){if(cv==="0"||cr){cv=k;cr=false}else cv+=k}
-  else if(k==="."){if(cv.indexOf(".")<0)cv+="."}
-  else if(k==="C"){cv="0";cp=null;co=null}
-  else if(k==="±"){cv=String(-parseFloat(cv))}
-  else if(k==="%"){cv=String(parseFloat(cv)/100)}
-  else if(k==="+"||k==="-"||k==="*"||k==="/"){if(cp!==null&&co&&!cr)cv=String(doCalc(parseFloat(cp),parseFloat(cv),co));cp=cv;co=k;cr=true}
-  else if(k==="="){if(cp!==null&&co){cv=String(doCalc(parseFloat(cp),parseFloat(cv),co));cp=null;co=null;cr=true}}
-  d.textContent=cv}
+function calcPress(k){var d=document.getElementById("cd");if(!d)return;if(k>="0"&&k<="9"){if(cv==="0"||cr){cv=k;cr=false}else cv+=k}else if(k==="."){if(cv.indexOf(".")<0)cv+="."}else if(k==="C"){cv="0";cp=null;co=null}else if(k==="±"){cv=String(-parseFloat(cv))}else if(k==="%"){cv=String(parseFloat(cv)/100)}else if(k==="+"||k==="-"||k==="*"||k==="/"){if(cp!==null&&co&&!cr)cv=String(doCalc(parseFloat(cp),parseFloat(cv),co));cp=cv;co=k;cr=true}else if(k==="="){if(cp!==null&&co){cv=String(doCalc(parseFloat(cp),parseFloat(cv),co));cp=null;co=null;cr=true}}d.textContent=cv}
 function doCalc(a,b,o){return o==="+"?a+b:o==="-"?a-b:o==="*"?a*b:b===0?"Ошибка":a/b}
 
 // === ПАРАМЕТРЫ ===
-function setTab(tab){document.querySelectorAll(".set-side div").forEach(function(d){d.classList.remove("act")});
-  var el=document.getElementById("st-"+tab);if(el)el.classList.add("act");var m=document.getElementById("set-main");if(!m)return;
-  if(tab==="sys")m.innerHTML="<h3>Система</h3><div class='toggle'><span>Уведомления</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div class='toggle'><span>Ночной свет</span><div class='tg' onclick='this.classList.toggle(\"on\");toggleNight()'></div></div><div class='toggle'><span>Прозрачность</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div style='margin-top:18px;padding:12px;background:#f5f7fa;border-radius:8px;font-size:13px'>💡 Windows 12 • Версия 12.0.1 • Сборка 2026.09</div>";
-  else if(tab==="per")m.innerHTML="<h3>Персонализация</h3><div class='toggle'><span>🌙 Тёмная тема</span><div class='tg' id='tg-dark' onclick='document.body.classList.toggle(\"dark\");this.classList.toggle(\"on\")'></div></div><h4 style='margin:18px 0 8px;font-size:14px'>Обои</h4><div style='display:flex;flex-wrap:wrap;gap:6px'><div onclick='chgWP(1,this)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#1a3a6b,#5e3a9e);border:2px solid #0078d7'></div><div onclick='chgWP(2,this)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#2d6a4f,#95d5b2)'></div><div onclick='chgWP(3,this)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#7400b8,#48bfe3)'></div><div onclick='chgWP(4,this)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#f77f00,#003049)'></div></div>";
-  else if(tab==="net")m.innerHTML="<h3>Сеть</h3><div style='padding:14px;background:#f5f7fa;border-radius:8px;font-size:14px'>📶 Wi-Fi: Home_Network_5G<br>⚡ Статус: Подключено<br>📡 IP: 192.168.1.42</div>";
-  else if(tab==="acc")m.innerHTML="<h3>Учётные записи</h3><div style='display:flex;gap:12px;align-items:center;margin-bottom:16px'><div class='avatar' style='width:40px;height:40px;font-size:16px'>П</div><div><div style='font-weight:600'>Пользователь</div><div style='font-size:13px;color:#666'>user@outlook.com</div></div></div><p style='font-size:14px;color:#555'>Учётная запись Microsoft активна.</p>";
-  else if(tab==="upd")m.innerHTML="<h3>Обновление</h3><div style='padding:18px;background:#e8f5e9;border-radius:8px;font-size:14px'>✅ Система обновлена.</div><div style='margin-top:12px;font-size:13px;color:#666'>Версия: 12.0.1 (2026.09)</div>"}
-function chgWP(n){var wp=document.getElementById("wp");
-  if(n===1)wp.style.background="radial-gradient(ellipse at 30% 20%,#4a90d9,transparent 50%),radial-gradient(ellipse at 80% 70%,#7b4fc9,transparent 45%),linear-gradient(135deg,#1a3a6b,#2d5a9e 25%,#5e3a9e 55%,#2a4a7e 80%,#1a2a5a)";
-  else if(n===2)wp.style.background="linear-gradient(135deg,#2d6a4f,#52b788 30%,#95d5b2 60%,#d8f3dc)";
-  else if(n===3)wp.style.background="linear-gradient(135deg,#7400b8,#5e60ce 30%,#5390d9 60%,#48bfe3)";
-  else if(n===4)wp.style.background="linear-gradient(135deg,#f77f00,#fcbf49 30%,#eae2b7 60%,#003049)"}
+function setTab(tab){document.querySelectorAll(".set-side div").forEach(function(d){d.classList.remove("act")});var el=document.getElementById("st-"+tab);if(el)el.classList.add("act");var m=document.getElementById("set-main");if(!m)return;if(tab==="sys")m.innerHTML="<h3>Система</h3><div class='toggle'><span>Уведомления</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div class='toggle'><span>Ночной свет</span><div class='tg' onclick='this.classList.toggle(\"on\");toggleNight()'></div></div><div class='toggle'><span>Прозрачность</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div style='margin-top:18px;padding:12px;background:#f5f7fa;border-radius:8px;font-size:13px'>💡 Windows 12 • Версия 12.0.1 • Сборка 2026.09</div>";else if(tab==="per")m.innerHTML="<h3>Персонализация</h3><div class='toggle'><span>🌙 Тёмная тема</span><div class='tg' onclick='document.body.classList.toggle(\"dark\");this.classList.toggle(\"on\")'></div></div><h4 style='margin:18px 0 8px;font-size:14px'>Обои</h4><div style='display:flex;flex-wrap:wrap;gap:6px'><div onclick='chgWP(1)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#1a3a6b,#5e3a9e);border:2px solid #0078d7'></div><div onclick='chgWP(2)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#2d6a4f,#95d5b2)'></div><div onclick='chgWP(3)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#7400b8,#48bfe3)'></div><div onclick='chgWP(4)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#f77f00,#003049)'></div></div>";else if(tab==="net")m.innerHTML="<h3>Сеть</h3><div style='padding:14px;background:#f5f7fa;border-radius:8px;font-size:14px'>📶 Wi-Fi: Home_Network_5G<br>⚡ Статус: Подключено<br>📡 IP: 192.168.1.42</div>";else if(tab==="acc")m.innerHTML="<h3>Учётные записи</h3><div style='display:flex;gap:12px;align-items:center;margin-bottom:16px'><div class='avatar' style='width:40px;height:40px;font-size:16px'>П</div><div><div style='font-weight:600'>Пользователь</div><div style='font-size:13px;color:#666'>user@outlook.com</div></div></div><p style='font-size:14px;color:#555'>Учётная запись Microsoft активна.</p>";else if(tab==="upd")m.innerHTML="<h3>Обновление</h3><div style='padding:18px;background:#e8f5e9;border-radius:8px;font-size:14px'>✅ Система обновлена.</div><div style='margin-top:12px;font-size:13px;color:#666'>Версия: 12.0.1 (2026.09)</div>"}
+function chgWP(n){var wp=document.getElementById("wp");if(n===1)wp.style.background="radial-gradient(ellipse at 30% 20%,#4a90d9,transparent 50%),radial-gradient(ellipse at 80% 70%,#7b4fc9,transparent 45%),linear-gradient(135deg,#1a3a6b,#2d5a9e 25%,#5e3a9e 55%,#2a4a7e 80%,#1a2a5a)";else if(n===2)wp.style.background="linear-gradient(135deg,#2d6a4f,#52b788 30%,#95d5b2 60%,#d8f3dc)";else if(n===3)wp.style.background="linear-gradient(135deg,#7400b8,#5e60ce 30%,#5390d9 60%,#48bfe3)";else if(n===4)wp.style.background="linear-gradient(135deg,#f77f00,#fcbf49 30%,#eae2b7 60%,#003049)"}
 
 // === ПРОВОДНИК ===
 var fs={"Рабочий стол":[{n:"Документ.txt",i:"📄",a:"notepad"},{n:"Рисунок.png",i:"🖼️",a:"paint"},{n:"Сайт.html",i:"🌐",a:"buber"}],"Документы":[{n:"Отчёт.docx",i:"📄",a:"notepad"},{n:"Таблица.xlsx",i:"📊",a:"calc"}],"Изображения":[{n:"Закат.jpg",i:"🌅",a:"paint"},{n:"Город.png",i:"🏙️",a:"paint"}],"Музыка":[{n:"Песня1.mp3",i:"🎵",a:null},{n:"Песня2.mp3",i:"🎵",a:null}],"Загрузки":[{n:"setup.exe",i:"⚙️",a:null},{n:"archive.zip",i:"🗜️",a:null},{n:"doc.pdf",i:"📕",a:"notepad"}]};
-function expGo(name,el){if(el){document.querySelectorAll(".exp-side .item").forEach(function(i){i.classList.remove("act")});el.classList.add("act")}
-  var p=document.getElementById("exp-path");if(p)p.textContent="📁 "+name;var f=document.getElementById("exp-files");if(!f)return;f.innerHTML="";
-  (fs[name]||[]).forEach(function(file){var d=document.createElement("div");d.className="exp-file";d.innerHTML="<div class='ico'>"+file.i+"</div><div class='nm'>"+file.n+"</div>";if(file.a)d.onclick=function(){openApp(file.a)};f.appendChild(d)})}
+function expGo(name,el){if(el){document.querySelectorAll(".exp-side .item").forEach(function(i){i.classList.remove("act")});el.classList.add("act")}var p=document.getElementById("exp-path");if(p)p.textContent="📁 "+name;var f=document.getElementById("exp-files");if(!f)return;f.innerHTML="";(fs[name]||[]).forEach(function(file){var d=document.createElement("div");d.className="exp-file";d.innerHTML="<div class='ico'>"+file.i+"</div><div class='nm'>"+file.n+"</div>";if(file.a)d.onclick=function(){openApp(file.a)};f.appendChild(d)})}
 
 // === PAINT ===
 var ptColor="#0078d7",ptErasing=false;
-function ptInit(){var c=document.getElementById("pt-canvas");if(!c)return;var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);
-  var cols=["#000","#fff","#f00","#0a0","#00f","#ff0","#f0f","#0ff","#888","#0078d7","#ff9800","#9c27b0"];
-  var cw=document.getElementById("pt-cols");if(!cw)return;cw.innerHTML="";
-  cols.forEach(function(col){var d=document.createElement("div");d.className="pt-col";d.style.background=col;if(col===ptColor)d.classList.add("act");
-  d.onclick=function(){ptColor=col;ptErasing=false;document.getElementById("pt-eraser").style.background="";document.querySelectorAll(".pt-col").forEach(function(x){x.classList.remove("act")});d.classList.add("act")};cw.appendChild(d)});
-  var dg=false;c.onmousedown=function(e){dg=true;ptDraw(e)};c.onmousemove=function(e){if(dg)ptDraw(e)};c.onmouseup=function(){dg=false};c.onmouseleave=function(){dg=false};
-  function ptDraw(e){var r=c.getBoundingClientRect(),sz=parseInt(document.getElementById("pt-size").value)||5;ctx.fillStyle=ptErasing?"#fff":ptColor;ctx.beginPath();ctx.arc(e.clientX-r.left,e.clientY-r.top,sz/2,0,Math.PI*2);ctx.fill()}}
+function ptInit(){var c=document.getElementById("pt-canvas");if(!c)return;var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);var cols=["#000","#fff","#f00","#0a0","#00f","#ff0","#f0f","#0ff","#888","#0078d7","#ff9800","#9c27b0"];var cw=document.getElementById("pt-cols");if(!cw)return;cw.innerHTML="";cols.forEach(function(col){var d=document.createElement("div");d.className="pt-col";d.style.background=col;if(col===ptColor)d.classList.add("act");d.onclick=function(){ptColor=col;ptErasing=false;document.getElementById("pt-eraser").style.background="";document.querySelectorAll(".pt-col").forEach(function(x){x.classList.remove("act")});d.classList.add("act")};cw.appendChild(d)});var dg=false;c.onmousedown=function(e){dg=true;ptDraw(e)};c.onmousemove=function(e){if(dg)ptDraw(e)};c.onmouseup=function(){dg=false};c.onmouseleave=function(){dg=false};function ptDraw(e){var r=c.getBoundingClientRect(),sz=parseInt(document.getElementById("pt-size").value)||5;ctx.fillStyle=ptErasing?"#fff":ptColor;ctx.beginPath();ctx.arc(e.clientX-r.left,e.clientY-r.top,sz/2,0,Math.PI*2);ctx.fill()}}
 function ptErase(btn){ptErasing=!ptErasing;btn.style.background=ptErasing?"#0078d7":"";btn.style.color=ptErasing?"#fff":""}
 function ptClear(){var c=document.getElementById("pt-canvas");if(!c)return;var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height)}
 function ptSave(){var c=document.getElementById("pt-canvas");if(!c)return;var a=document.createElement("a");a.href=c.toDataURL("image/png");a.download="рисунок.png";a.click()}
 
 // === ТЕРМИНАЛ ===
 function termInit(){var o=document.getElementById("term-out");if(!o)return;o.innerHTML="Windows 12 [Version 12.0.1]\n(c) Concept.\n\nC:\\Users\\П> "}
-function termExec(e){if(e.key!=="Enter")return;var i=e.target,o=document.getElementById("term-out"),cmd=i.value.trim();i.value="";
-  o.innerHTML+=esc(cmd)+"\n";var c=cmd.split(/\s+/)[0].toLowerCase(),args=cmd.split(/\s+/).slice(1),out="";
-  if(c==="help")out="Команды: help, dir, cd, echo, date, time, cls, whoami, ver, start [приложение], ipconfig, ping, pwd, exit";
-  else if(c==="dir"||c==="ls")out=" Документы\n Изображения\n Музыка\n Загрузки\n Рабочий стол";
-  else if(c==="cd"){if(args[0]){out="C:\\Users\\П\\"+args[0]}else out="C:\\Users\\П"}
-  else if(c==="pwd")out="C:\\Users\\П";
-  else if(c==="echo")out=args.join(" ");
-  else if(c==="date")out=new Date().toLocaleDateString("ru-RU");
-  else if(c==="time")out=new Date().toLocaleTimeString("ru-RU");
-  else if(c==="cls"||c==="clear"){o.innerHTML="";out=""}
-  else if(c==="whoami")out="windows12\\пользователь";
-  else if(c==="ver")out="Windows 12 Concept [Version 12.0.1]";
-  else if(c==="start"&&apps[args[0]]){openApp(args[0]);out="Запуск "+args[0]+"..."}
-  else if(c==="ipconfig")out="IPv4: 192.168.1.42\nШлюз: 192.168.1.1\nDNS: 8.8.8.8";
-  else if(c==="ping")out="PING "+(args[0]||"localhost")+" (127.0.0.1): время=1мс TTL=128";
-  else if(c==="exit"){closeWin("terminal");return}
-  else if(c)out="'"+c+"' не является командой. Введите 'help'";
-  if(out)o.innerHTML+=out+"\n";o.innerHTML+="C:\\Users\\П> ";o.scrollTop=o.scrollHeight}
+function termExec(e){if(e.key!=="Enter")return;var i=e.target,o=document.getElementById("term-out"),cmd=i.value.trim();i.value="";o.innerHTML+=esc(cmd)+"\n";var c=cmd.split(/\s+/)[0].toLowerCase(),args=cmd.split(/\s+/).slice(1),out="";if(c==="help")out="Команды: help, dir, cd, echo, date, time, cls, whoami, ver, start, ipconfig, ping, pwd, exit";else if(c==="dir"||c==="ls")out=" Документы\n Изображения\n Музыка\n Загрузки\n Рабочий стол";else if(c==="cd")out=args[0]?"C:\\Users\\П\\"+args[0]:"C:\\Users\\П";else if(c==="pwd")out="C:\\Users\\П";else if(c==="echo")out=args.join(" ");else if(c==="date")out=new Date().toLocaleDateString("ru-RU");else if(c==="time")out=new Date().toLocaleTimeString("ru-RU");else if(c==="cls"||c==="clear"){o.innerHTML="";out=""}else if(c==="whoami")out="windows12\\пользователь";else if(c==="ver")out="Windows 12 Concept [Version 12.0.1]";else if(c==="start"&&apps[args[0]]){openApp(args[0]);out="Запуск "+args[0]+"..."}else if(c==="ipconfig")out="IPv4: 192.168.1.42\nШлюз: 192.168.1.1\nDNS: 8.8.8.8";else if(c==="ping")out="PING "+(args[0]||"localhost")+" (127.0.0.1): время=1мс TTL=128";else if(c==="exit"){closeWin("terminal");return}else if(c)out="'"+c+"' не является командой. Введите 'help'";if(out)o.innerHTML+=out+"\n";o.innerHTML+="C:\\Users\\П> ";o.scrollTop=o.scrollHeight}
 
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 
@@ -517,12 +445,9 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").repl
 function tick(){var n=new Date();document.getElementById("ct").textContent=String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");document.getElementById("cd").textContent=String(n.getDate()).padStart(2,"0")+"."+String(n.getMonth()+1).padStart(2,"0")+"."+n.getFullYear()}
 tick();setInterval(tick,1000);
 
-// === СТАРТ-МЕНЮ, ТРЕЙ, КОНТЕКСТ ===
+// === МЕНЮ И КОНТЕКСТ ===
 document.getElementById("start-btn").onclick=function(e){e.stopPropagation();document.getElementById("start-menu").classList.toggle("open");closeTrayPanel()};
-document.addEventListener("click",function(e){
-  var sm=document.getElementById("start-menu");if(!sm.contains(e.target)&&e.target.id!=="start-btn")sm.classList.remove("open");
-  var tp=document.getElementById("tray-panel");if(tp.classList.contains("open")&&!tp.contains(e.target)&&!e.target.classList.contains("tray-btn")&&e.target.id!=="tray-clock")tp.classList.remove("open");
-  hideCtx()});
+document.addEventListener("click",function(e){var sm=document.getElementById("start-menu");if(!sm.contains(e.target)&&e.target.id!=="start-btn")sm.classList.remove("open");var tp=document.getElementById("tray-panel");if(tp.classList.contains("open")&&!tp.contains(e.target)&&!e.target.classList.contains("tray-btn")&&e.target.id!=="tray-clock")tp.classList.remove("open");hideCtx()});
 function closeTrayPanel(){document.getElementById("tray-panel").classList.remove("open")}
 document.getElementById("desktop").addEventListener("contextmenu",function(e){e.preventDefault();var m=document.getElementById("ctx");m.style.left=e.clientX+"px";m.style.top=e.clientY+"px";m.classList.add("open")});
 function hideCtx(){document.getElementById("ctx").classList.remove("open")}
