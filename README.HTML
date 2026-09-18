@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Windows 12</title>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <style>
 :root{--glass:rgba(255,255,255,.72);--accent:#0078d7;--tile:rgba(255,255,255,.5);
 --tile-h:rgba(255,255,255,.85);--tb:rgba(255,255,255,.82);--menu:rgba(255,255,255,.93)}
@@ -207,7 +208,7 @@ body.dark .dl-bar{background:#333}
 .ng-wrap{padding:16px;display:flex;flex-direction:column;height:100%;font-family:sans-serif}
 .ng-status{margin-bottom:12px;padding:8px 12px;background:#e7f0fc;border-radius:8px;color:#0078d7;font-size:13px;font-weight:600}
 .ng-board{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:300px;margin:16px auto;width:100%}
-.ng-cell{aspect-ratio:1;border:2px solid #0078d7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;cursor:pointer;transition:background .15s;cursor:pointer;background:#fff;color:#0078d7}
+.ng-cell{aspect-ratio:1;border:2px solid #0078d7;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:700;cursor:pointer;transition:background .15s;background:#fff;color:#0078d7}
 body.dark .ng-cell{background:#1a1a2e;color:#48bfe3;border-color:#48bfe3}
 .ng-cell:hover{background:#e7f0fc}body.dark .ng-cell:hover{background:#1a2840}
 .ng-cell.x{color:#e81123}body.dark .ng-cell.x{color:#ff6b6b}
@@ -221,6 +222,11 @@ body.dark .ng-room-btn{background:#1a1a2e;color:#48bfe3}
 .ng-room-btn:hover{background:#e7f0fc}body.dark .ng-room-btn:hover{background:#1a2840}
 .ng-code{font-size:32px;font-weight:700;text-align:center;color:#0078d7;letter-spacing:4px;margin:10px 0}
 body.dark .ng-code{color:#48bfe3}
+.ng-mode-sel{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+.ng-mode-btn{padding:12px 24px;border:2px solid #0078d7;background:#fff;color:#0078d7;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s}
+body.dark .ng-mode-btn{background:#1a1a2e;color:#48bfe3}
+.ng-mode-btn.act{background:#0078d7;color:#fff}
+body.dark .ng-mode-btn.act{background:#48bfe3;color:#1a1a2e}
 </style>
 </head>
 <body>
@@ -245,7 +251,7 @@ body.dark .ng-code{color:#48bfe3}
   <div class="icon" onclick="openApp('terminal')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='8' width='40' height='36' rx='4' fill='%231a1a1a'/%3E%3Cpath d='M14 18l8 6-8 6' fill='none' stroke='%230f0' stroke-width='2'/%3E%3C/svg%3E"><span>Терминал</span></div>
   <div class="icon" onclick="openApp('msstore')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='6' width='40' height='40' rx='8' fill='%230078d7'/%3E%3Cpath d='M18 18h16v16H18z' fill='white'/%3E%3C/svg%3E"><span>Microsoft Store</span></div>
   <div class="icon" onclick="openApp('steam')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Ccircle cx='26' cy='26' r='22' fill='%231b2838'/%3E%3Cpath d='M26 12c7.732 0 14 6.268 14 14s-6.268 14-14 14-14-6.268-14-14 6.268-14 14-14z' fill='%23fff' opacity='.4'/%3E%3Cpath d='M26 20c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6z' fill='%23fff'/%3E%3C/svg%3E"><span>Steam</span></div>
-  <div class="icon" onclick="openApp('netgame')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='6' width='40' height='40' rx='8' fill='%23107c10'/%3E%3Ctext x='26' y='34' font-size='20' text-anchor='middle' fill='white'%3E%E2%9A%94%3C/text%3E%3C/svg%3E"><span>Сетевая игра</span></div>
+  <div class="icon" onclick="openApp('ttt')"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 52 52'%3E%3Crect x='6' y='6' width='40' height='40' rx='8' fill='%23107c10'/%3E%3Cline x1='22' y1='14' x2='14' y2='38' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cline x1='14' y1='14' x2='22' y2='38' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='35' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='4'/%3E%3C/svg%3E"><span>Крестики-нолики</span></div>
 </div>
 <div class="taskbar">
   <button class="start-btn" id="start-btn">⊞</button>
@@ -290,7 +296,7 @@ var apps={
   terminal:{t:"Терминал",i:"💻",w:560,h:380},
   msstore:{t:"Microsoft Store",i:"🏪",w:800,h:560,max:true},
   steam:{t:"Steam",i:"🎮",w:820,h:580,max:true},
-  netgame:{t:"Сетевая игра",i:"⚔️",w:440,h:560}
+  ttt:{t:"Крестики-нолики с другом",i:"⭕",w:440,h:580}
 };
 var wins={},zc=100,volLevel=65,brightLevel=80,wifiOn=true,nightOn=false,batLevel=78;
 var calMonth=new Date().getMonth(),calYear=new Date().getFullYear();
@@ -309,12 +315,12 @@ function openApp(id){
   if(id==="buber")body=brBody();else if(id==="notepad")body=npBody();else if(id==="calc")body=calcBody();
   else if(id==="settings")body=setBody();else if(id==="explorer")body=expBody();else if(id==="paint")body=ptBody();
   else if(id==="terminal")body=termBody();else if(id==="msstore")body=renderMsStore();else if(id==="steam")body=renderSteam();
-  else if(id==="netgame")body=renderNetGame();else if(installedApps.indexOf(id)>=0)body=renderInstalledApp(id);
+  else if(id==="ttt")body=renderTtt();else if(installedApps.indexOf(id)>=0)body=renderInstalledApp(id);
   w.innerHTML="<div class='title-bar' onmousedown='dragWin(event,\""+id+"\")'><span style='font-size:15px'>"+a.i+"</span><span class='ttl'>"+a.t+"</span><div class='wc'><button class='win-btn' onclick='minWin(\""+id+"\")'>─</button><button class='win-btn' onclick='maxWin(\""+id+"\")'>▢</button><button class='win-btn close' onclick='closeWin(\""+id+"\")'>✕</button></div></div><div class='win-body'>"+body+"</div>";
   document.getElementById("wins").appendChild(w);wins[id]=w;w.addEventListener("mousedown",function(){bringFront(w)});
   if(id==="buber")setTimeout(brHome,50);if(id==="paint")setTimeout(ptInit,50);if(id==="terminal")setTimeout(termInit,50);
   if(id==="settings")setTimeout(function(){setTab("sys")},50);if(id==="explorer")setTimeout(function(){expGo("Рабочий стол",null)},50);
-  if(id==="netgame")setTimeout(ngInit,50);if(installedApps.indexOf(id)>=0)setTimeout(function(){initInstalledApp(id)},50);updateTB()}
+  if(id==="ttt")setTimeout(tttInit,50);if(installedApps.indexOf(id)>=0)setTimeout(function(){initInstalledApp(id)},50);updateTB()}
 
 function brBody(){return "<div class='br-bar'><button class='br-btn' onclick='brBack()'>←</button><button class='br-btn' onclick='brFwd()'>→</button><button class='br-btn' onclick='brReload()'>⟳</button><button class='br-btn' onclick='brHome()'>🏠</button><input class='br-input' id='br-addr' placeholder='Поиск или URL...' onkeydown='if(event.key==\"Enter\")brGo(this.value)'><button class='br-btn' onclick='brNew()'>↗</button></div><iframe class='br-frame' id='br-frame' sandbox='allow-scripts allow-same-origin allow-forms allow-popups'></iframe><div class='br-info' id='br-info'>Готово</div>"}
 function npBody(){return "<div class='np-tb'><button class='np-btn' onclick='npSave()'>💾 Сохранить</button><button class='np-btn' onclick='npOpen()'>📂 Открыть</button><span style='margin-left:auto;padding:6px 10px;font-size:12px;color:#888' id='np-cnt'>0 символов</span></div><textarea class='np-area' id='np-area' placeholder='Введите текст...' oninput='document.getElementById(\"np-cnt\").textContent=this.value.length+\" символов\"'></textarea>"}
@@ -324,21 +330,77 @@ function expBody(){return "<div class='exp'><div class='exp-side'><div class='gr
 function ptBody(){return "<div class='pt-wrap'><div class='pt-tools'><div style='font-size:11px;font-weight:600;color:#888'>ЦВЕТ</div><div class='pt-cols' id='pt-cols'></div><div style='font-size:11px;font-weight:600;color:#888;margin-top:6px'>РАЗМЕР</div><input type='range' min='1' max='40' value='5' id='pt-size' style='width:80px'><button class='np-btn' id='pt-eraser' onclick='ptErase(this)' style='margin-top:6px'>Ластик</button><button class='np-btn' onclick='ptSave()' style='margin-top:4px'>💾 PNG</button><button class='np-btn' onclick='ptClear()' style='margin-top:4px'>Очистить</button></div><canvas id='pt-canvas' width='400' height='340'></canvas></div>"}
 function termBody(){return "<div style='display:flex;flex-direction:column;height:100%'><div class='term' id='term-out'></div><div style='display:flex;padding:8px;background:#0c0c0c;border-top:1px solid #333'><span style='color:#0f0;font-family:monospace;font-size:13px'>C:\\Users\\П&gt;&nbsp;</span><input class='term-in' id='term-in' autofocus onkeydown='termExec(event)'></div></div>"}
 
-// === СЕТЕВАЯ ИГРА ===
-var ngCh=null,ngRole="",ngRoom="",ngBoard=["","","","","","","","",""],ngTurn="X",ngOver=false,ngMyScore=0,ngOppScore=0;
-function renderNetGame(){var h="<div class='ng-wrap'><div style='font-size:22px;font-weight:700;text-align:center;margin-bottom:6px'>⚔️ Крестики-нолики</div><div style='font-size:13px;color:#888;text-align:center;margin-bottom:14px'>Игра по сети между вкладками браузера<br>Открой игру во второй вкладке и войди по коду</div><div class='ng-status' id='ng-status'>Статус: не подключено</div><div id='ng-lobby'><div style='display:flex;gap:10px;justify-content:center;margin-bottom:16px'><button class='ng-room-btn' onclick='ngCreate()'>🏠 Создать комнату</button><button class='ng-room-btn' onclick='document.getElementById(\"ng-join-box\").style.display=\"block\"'>🔗 Войти по коду</button></div><div id='ng-join-box' style='display:none;text-align:center;margin-top:12px'><input class='br-input' id='ng-code-input' placeholder='Код комнаты...' style='width:160px;text-align:center;font-size:18px;letter-spacing:2px' onkeydown='if(event.key==\"Enter\")ngJoin()'><button class='game-btn' style='font-size:14px;padding:8px 20px;margin-left:8px' onclick='ngJoin()'>Войти</button></div><div id='ng-host-box' style='display:none;text-align:center;margin-top:12px'><div style='font-size:13px;color:#888;margin-bottom:6px'>Код комнаты:</div><div class='ng-code' id='ng-code-display'>------</div><div style='font-size:13px;color:#888'>Ожидание соперника...</div></div></div><div id='ng-game' style='display:none'><div class='ng-info' id='ng-info'>Ваш ход (X)</div><div style='display:flex;justify-content:center;gap:20px;margin-bottom:12px;font-size:14px'><span>Вы: <b id='ng-my'>0</b></span><span>Соперник: <b id='ng-opp'>0</b></span></div><div class='ng-board' id='ng-board'>";for(var i=0;i<9;i++)h+="<div class='ng-cell' id='ng-c"+i+"' onclick='ngClick("+i+")'></div>";h+="</div><div style='text-align:center;margin-top:14px'><button class='ng-room-btn' onclick='ngReset()'>🔄 Новая партия</button> <button class='ng-room-btn' onclick='ngLeave()'>Выйти</button></div></div></div>";return h}
-function ngInit(){}
-function ngCreate(){ngRoom=String(Math.floor(1000+Math.random()*9000));ngRole="X";ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;if(ngCh)ngCh.close();ngCh=new BroadcastChannel("ng_"+ngRoom);ngCh.onmessage=ngOnMsg;document.getElementById("ng-lobby").style.display="none";document.getElementById("ng-game").style.display="none";document.getElementById("ng-host-box").style.display="block";document.getElementById("ng-code-display").textContent=ngRoom;document.getElementById("ng-status").textContent="Статус: ждём соперника (комната "+ngRoom+")"}
-function ngJoin(){var code=document.getElementById("ng-code-input").value.trim();if(!code||code.length<3)return;ngRoom=code;ngRole="O";ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;if(ngCh)ngCh.close();ngCh=new BroadcastChannel("ng_"+ngRoom);ngCh.onmessage=ngOnMsg;ngCh.postMessage({type:"join"});document.getElementById("ng-lobby").style.display="none";document.getElementById("ng-game").style.display="block";document.getElementById("ng-status").textContent="Статус: подключено (комната "+ngRoom+")";ngUpdateUI()}
-function ngOnMsg(e){var d=e.data;if(d.type==="join"&&ngRole==="X"){document.getElementById("ng-host-box").style.display="none";document.getElementById("ng-game").style.display="block";document.getElementById("ng-status").textContent="Статус: игра идёт (комната "+ngRoom+")";ngCh.postMessage({type:"start"});ngUpdateUI()}if(d.type==="start"&&ngRole==="O")ngUpdateUI();if(d.type==="move"){ngBoard=d.board;ngTurn=d.turn;ngOver=d.over||false;if(d.win)ngHighlight(d.win);if(d.over)ngEndGame(d.winner);else ngUpdateUI()}if(d.type==="reset"){ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;ngClearHighlight();ngUpdateUI()}}
-function ngClick(i){if(ngOver||ngBoard[i]||ngTurn!==ngRole)return;ngBoard[i]=ngRole;ngTurn=ngRole==="X"?"O":"X";var win=ngCheckWin();ngUpdateUI();if(ngCh)ngCh.postMessage({type:"move",board:ngBoard,turn:ngTurn,over:!!win,win:win,winner:win?ngRole:null});if(win)ngEndGame(ngRole)}
-function ngCheckWin(){var w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(var j=0;j<w.length;j++)if(ngBoard[w[j][0]]&&ngBoard[w[j][0]]===ngBoard[w[j][1]]&&ngBoard[w[j][1]]===ngBoard[w[j][2]])return w[j];if(ngBoard.every(function(c){return c}))return"draw";return null}
-function ngHighlight(line){if(line==="draw")return;line.forEach(function(i){var el=document.getElementById("ng-c"+i);if(el)el.classList.add("win")})}
-function ngClearHighlight(){for(var i=0;i<9;i++){var el=document.getElementById("ng-c"+i);if(el)el.classList.remove("win")}}
-function ngEndGame(winner){ngOver=true;var info=document.getElementById("ng-info");if(winner==="draw"){if(info)info.textContent="Ничья!"}else{var me=winner===ngRole;if(me)ngMyScore++;else ngOppScore++;var m=document.getElementById("ng-my"),o=document.getElementById("ng-opp");if(m)m.textContent=ngMyScore;if(o)o.textContent=ngOppScore;if(info)info.textContent=me?"Вы выиграли! 🎉":"Вы проиграли 😕"}}
-function ngUpdateUI(){var info=document.getElementById("ng-info");if(info)info.textContent=ngTurn===ngRole?"Ваш ход ("+ngRole+")":"Ход соперника ("+ngTurn+")";for(var i=0;i<9;i++){var el=document.getElementById("ng-c"+i);if(el){el.textContent=ngBoard[i]||"";el.className="ng-cell"+(ngBoard[i]?" taken "+ngBoard[i].toLowerCase():"")}}}
-function ngReset(){ngBoard=["","","","","","","","",""];ngTurn="X";ngOver=false;ngClearHighlight();ngUpdateUI();if(ngCh)ngCh.postMessage({type:"reset"})}
-function ngLeave(){if(ngCh){ngCh.close();ngCh=null}ngRole="";ngRoom="";var g=document.getElementById("ng-game"),l=document.getElementById("ng-lobby"),hb=document.getElementById("ng-host-box");if(g)g.style.display="none";if(hb)hb.style.display="none";if(l)l.style.display="block";var s=document.getElementById("ng-status");if(s)s.textContent="Статус: не подключено"}
+// === КРЕСТИКИ-НОЛИКИ С ДРУГОМ (по сети через MQTT) ===
+var tttClient=null,tttRole="",tttRoom="",tttBoard=["","","","","","","","",""],tttTurn="X",tttOver=false,tttMyScore=0,tttOppScore=0,tttMyId="",tttMode="net",tttCh=null;
+function renderTtt(){
+  var h="<div class='ng-wrap'><div style='font-size:22px;font-weight:700;text-align:center;margin-bottom:4px'>⭕ Крестики-нолики с другом</div>";
+  h+="<div style='font-size:13px;color:#888;text-align:center;margin-bottom:14px'>Играйте по сети с другом из любой точки мира!</div>";
+  h+="<div class='ng-status' id='ttt-status'>Статус: не подключено</div>";
+  h+="<div id='ttt-lobby'>";
+  h+="<div class='ng-mode-sel'><button class='ng-mode-btn act' id='ttt-mnet' onclick='tttSelMode(\"net\")'>🌐 По сети</button><button class='ng-mode-btn' id='ttt-mlocal' onclick='tttSelMode(\"local\")'>💻 Локально</button></div>";
+  h+="<div id='ttt-net-lobby'><div style='display:flex;gap:10px;justify-content:center;margin-bottom:16px'><button class='ng-room-btn' onclick='tttCreate()'>🏠 Создать комнату</button><button class='ng-room-btn' onclick='document.getElementById(\"ttt-join-box\").style.display=\"block\"'>🔗 Войти по коду</button></div>";
+  h+="<div id='ttt-join-box' style='display:none;text-align:center;margin-top:12px'><input class='br-input' id='ttt-code-input' placeholder='Код комнаты...' style='width:160px;text-align:center;font-size:18px;letter-spacing:2px' onkeydown='if(event.key==\"Enter\")tttJoin()'><button class='game-btn' style='font-size:14px;padding:8px 20px;margin-left:8px' onclick='tttJoin()'>Войти</button></div>";
+  h+="<div id='ttt-host-box' style='display:none;text-align:center;margin-top:12px'><div style='font-size:13px;color:#888;margin-bottom:6px'>Код комнаты (передай другу):</div><div class='ng-code' id='ttt-code-display'>------</div><div style='font-size:13px;color:#888' id='ttt-wait-text'>Подключение к серверу...</div></div></div>";
+  h+="<div id='ttt-local-lobby' style='display:none;text-align:center;margin-top:12px'><div style='font-size:14px;color:#666;margin-bottom:12px'>Открой эту же страницу во второй вкладке и создай комнату там</div><button class='ng-room-btn' onclick='tttCreate()'>🏠 Создать комнату</button></div>";
+  h+="</div>";
+  h+="<div id='ttt-game' style='display:none'><div class='ng-info' id='ttt-info'>Ваш ход (X)</div>";
+  h+="<div style='display:flex;justify-content:center;gap:20px;margin-bottom:12px;font-size:14px'><span>Вы: <b id='ttt-my'>0</b></span><span>Друг: <b id='ttt-opp'>0</b></span></div>";
+  h+="<div class='ng-board' id='ttt-board'>";
+  for(var i=0;i<9;i++)h+="<div class='ng-cell' id='ttt-c"+i+"' onclick='tttClick("+i+")'></div>";
+  h+="</div><div style='text-align:center;margin-top:14px'><button class='ng-room-btn' onclick='tttReset()'>🔄 Новая партия</button> <button class='ng-room-btn' onclick='tttLeave()'>Выйти</button></div></div></div>";return h
+}
+function tttInit(){}
+function tttSelMode(m){tttMode=m;document.getElementById("ttt-mnet").classList.toggle("act",m==="net");document.getElementById("ttt-mlocal").classList.toggle("act",m==="local");document.getElementById("ttt-net-lobby").style.display=m==="net"?"block":"none";document.getElementById("ttt-local-lobby").style.display=m==="local"?"block":"none"}
+function tttGenId(){return Math.random().toString(36).substr(2,8)}
+function tttCreate(){
+  tttRoom=String(Math.floor(1000+Math.random()*9000));tttRole="X";tttMyId=tttGenId();
+  tttBoard=["","","","","","","","",""];tttTurn="X";tttOver=false;
+  document.getElementById("ttt-lobby").style.display="none";document.getElementById("ttt-game").style.display="none";
+  document.getElementById("ttt-host-box").style.display="block";document.getElementById("ttt-code-display").textContent=tttRoom;
+  document.getElementById("ttt-status").textContent="Статус: подключение к серверу...";document.getElementById("ttt-wait-text").textContent="Подключение к серверу...";
+  if(tttMode==="net"){
+    if(tttClient)tttClient.end(true);
+    tttClient=mqtt.connect("wss://broker.hivemq.com:8884/mqtt",{clientId:"ttt_"+tttMyId,clean:true,connectTimeout:8000});
+    tttClient.on("connect",function(){tttClient.subscribe("ttt_room_"+tttRoom,{qos:0});document.getElementById("ttt-status").textContent="Статус: комната "+tttRoom+" создена, ждём друга...";document.getElementById("ttt-wait-text").textContent="Ожидание друга..."});
+    tttClient.on("message",function(topic,msg){if(topic==="ttt_room_"+tttRoom)tttOnMsg(JSON.parse(msg.toString()))});
+    tttClient.on("error",function(e){document.getElementById("ttt-status").textContent="Статус: ошибка подключения 😕"});
+  }else{
+    if(tttCh)tttCh.close();tttCh=new BroadcastChannel("ttt_"+tttRoom);tttCh.onmessage=function(e){tttOnMsg(e.data)};
+    document.getElementById("ttt-status").textContent="Статус: комната "+tttRoom+" (локально), ждём друга...";document.getElementById("ttt-wait-text").textContent="Открой вторую вкладку и войди по коду"
+  }
+}
+function tttJoin(){
+  var code=document.getElementById("ttt-code-input").value.trim();if(!code||code.length<3)return;
+  tttRoom=code;tttRole="O";tttMyId=tttGenId();tttBoard=["","","","","","","","",""];tttTurn="X";tttOver=false;
+  document.getElementById("ttt-lobby").style.display="none";
+  if(tttMode==="net"){
+    if(tttClient)tttClient.end(true);
+    tttClient=mqtt.connect("wss://broker.hivemq.com:8884/mqtt",{clientId:"ttt_"+tttMyId,clean:true,connectTimeout:8000});
+    tttClient.on("connect",function(){tttClient.subscribe("ttt_room_"+tttRoom,{qos:0});tttSend({type:"join",from:tttMyId})});
+    tttClient.on("message",function(topic,msg){if(topic==="ttt_room_"+tttRoom)tttOnMsg(JSON.parse(msg.toString()))});
+    tttClient.on("error",function(e){document.getElementById("ttt-status").textContent="Статус: ошибка 😕"});
+  }else{
+    if(tttCh)tttCh.close();tttCh=new BroadcastChannel("ttt_"+tttRoom);tttCh.onmessage=function(e){tttOnMsg(e.data)};tttSend({type:"join",from:tttMyId})
+  }
+  document.getElementById("ttt-game").style.display="block";
+  document.getElementById("ttt-status").textContent="Статус: подключение к комнате "+tttRoom+"...";tttUpdateUI()
+}
+function tttSend(obj){obj.from=tttMyId;if(tttMode==="net"&&tttClient&&tttClient.connected)tttClient.publish("ttt_room_"+tttRoom,JSON.stringify(obj),{qos:0});else if(tttMode==="local"&&tttCh)tttCh.postMessage(obj)}
+function tttOnMsg(d){if(d.from===tttMyId)return;
+  if(d.type==="join"&&tttRole==="X"){document.getElementById("ttt-host-box").style.display="none";document.getElementById("ttt-game").style.display="block";document.getElementById("ttt-status").textContent="Статус: игра идёт! (комната "+tttRoom+")";tttSend({type:"start"});tttUpdateUI()}
+  if(d.type==="start"&&tttRole==="O"){document.getElementById("ttt-status").textContent="Статус: игра идёт! (комната "+tttRoom+")";tttUpdateUI()}
+  if(d.type==="move"){tttBoard=d.board;tttTurn=d.turn;tttOver=d.over||false;if(d.win)tttHighlight(d.win);if(d.over)tttEndGame(d.winner);else tttUpdateUI()}
+  if(d.type==="reset"){tttBoard=["","","","","","","","",""];tttTurn="X";tttOver=false;tttClearHighlight();tttUpdateUI()}
+  if(d.type==="leave"){document.getElementById("ttt-status").textContent="Статус: друг вышел 😕";tttOver=true}
+}
+function tttClick(i){if(tttOver||tttBoard[i]||tttTurn!==tttRole)return;tttBoard[i]=tttRole;tttTurn=tttRole==="X"?"O":"X";var win=tttCheckWin();tttUpdateUI();tttSend({type:"move",board:tttBoard,turn:tttTurn,over:!!win,win:win,winner:win?tttRole:null});if(win)tttEndGame(tttRole)}
+function tttCheckWin(){var w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(var j=0;j<w.length;j++)if(tttBoard[w[j][0]]&&tttBoard[w[j][0]]===tttBoard[w[j][1]]&&tttBoard[w[j][1]]===tttBoard[w[j][2]])return w[j];if(tttBoard.every(function(c){return c}))return"draw";return null}
+function tttHighlight(line){if(line==="draw")return;line.forEach(function(i){var el=document.getElementById("ttt-c"+i);if(el)el.classList.add("win")})}
+function tttClearHighlight(){for(var i=0;i<9;i++){var el=document.getElementById("ttt-c"+i);if(el)el.classList.remove("win")}}
+function tttEndGame(winner){tttOver=true;var info=document.getElementById("ttt-info");if(winner==="draw"){if(info)info.textContent="Ничья!"}else{var me=winner===tttRole;if(me)tttMyScore++;else tttOppScore++;var m=document.getElementById("ttt-my"),o=document.getElementById("ttt-opp");if(m)m.textContent=tttMyScore;if(o)o.textContent=tttOppScore;if(info)info.textContent=me?"Вы выиграли! 🎉":"Друг выиграл 😕"}}
+function tttUpdateUI(){var info=document.getElementById("ttt-info");if(info)info.textContent=tttTurn===tttRole?"Ваш ход ("+tttRole+")":"Ход друга ("+tttTurn+")";for(var i=0;i<9;i++){var el=document.getElementById("ttt-c"+i);if(el){el.textContent=tttBoard[i]||"";el.className="ng-cell"+(tttBoard[i]?" taken "+tttBoard[i].toLowerCase():"")}}}
+function tttReset(){tttBoard=["","","","","","","","",""];tttTurn="X";tttOver=false;tttClearHighlight();tttUpdateUI();tttSend({type:"reset"})}
+function tttLeave(){tttSend({type:"leave",from:tttMyId});if(tttClient){tttClient.end(true);tttClient=null}if(tttCh){tttCh.close();tttCh=null}tttRole="";tttRoom="";var g=document.getElementById("ttt-game"),l=document.getElementById("ttt-lobby"),hb=document.getElementById("ttt-host-box");if(g)g.style.display="none";if(hb)hb.style.display="none";if(l)l.style.display="block";var s=document.getElementById("ttt-status");if(s)s.textContent="Статус: не подключено"}
 
 // === MICROSOFT STORE ===
 var msApps=[{n:"Spotify",i:"🎵",d:"Музыка",p:"Бесплатно",sz:"65 МБ",bg:"#1db954",appId:"spotify"},{n:"WhatsApp",i:"💬",d:"Мессенджер",p:"Бесплатно",sz:"52 МБ",bg:"#25d366",appId:"whatsapp"},{n:"VS Code",i:"💻",d:"Редактор кода",p:"Бесплатно",sz:"89 МБ",bg:"#007acc",appId:"vscode"},{n:"Netflix",i:"🎬",d:"Фильмы",p:"Бесплатно",sz:"42 МБ",bg:"#e50914",appId:"netflix"},{n:"Zoom",i:"📹",d:"Видеозвонки",p:"Бесплатно",sz:"38 МБ",bg:"#2d8cff",appId:"zoom"},{n:"Paint 3D",i:"🎨",d:"Рисование",p:"Бесплатно",sz:"45 МБ",bg:"#0078d7",appId:"paint3d"},{n:"Photos",i:"🖼️",d:"Фото",p:"Бесплатно",sz:"28 МБ",bg:"#ff6b6b",appId:"photos"},{n:"Sticky Notes",i:"📝",d:"Заметки",p:"Бесплатно",sz:"8 МБ",bg:"#fdb44b",appId:"stickynotes"},{n:"Calculator Plus",i:"🧮",d:"Калькулятор",p:"Бесплатно",sz:"12 МБ",bg:"#333",appId:"calcplus"},{n:"Xbox Game Bar",i:"🎮",d:"Оверлей",p:"Бесплатно",sz:"34 МБ",bg:"#107c10",appId:"xboxbar"}];
@@ -353,7 +415,7 @@ function stSearch(){var q=document.getElementById("st-search").value.toLowerCase
 function stDownload(idx){var g=steamGames[idx],btn=document.getElementById("st-btn-"+idx);if(installedApps.indexOf(g.appId)>=0){openApp(g.appId);return}if(!btn||btn.dataset.dl==="1")return;btn.dataset.dl="1";btn.textContent="Установка...";btn.style.background="#555";var bar=document.getElementById("st-dl-"+idx),fill=document.getElementById("st-fill-"+idx);bar.classList.add("show");var prog=0,iv=setInterval(function(){prog+=Math.random()*12+4;if(prog>=100){prog=100;clearInterval(iv);fill.style.width="100%";btn.textContent="Распаковка...";setTimeout(function(){addDesktopIcon(g.appId,g.i,g.bg,g.n);btn.textContent="Играть ▶";btn.style.background="#107c10";btn.style.color="#fff";btn.onclick=function(){openApp(g.appId)}},600)}else{fill.style.width=prog+"%";btn.textContent=Math.round(prog)+"%"}},300)}
 
 // === УСТАНОВЛЕННЫЕ ПРИЛОЖЕНИЯ ===
-function renderInstalledApp(id){var a=apps[id];if(id==="spotify")return renderSpotify();if(id==="whatsapp")return renderWhatsApp();if(id==="vscode")return renderVSCode();if(id==="netflix")return renderNetflix();if(id==="zoom")return renderZoom();if(id==="paint3d")return ptBody();if(id==="photos")return renderPhotos();if(id==="stickynotes")return renderStickyNotes();if(id==="calcplus")return calcBody();if(id==="xboxbar")return renderXboxBar();if(id.indexOf("game_")===0)return renderGame(a.t,a.i);return "<div class='app-win'><div style='font-size:22px;font-weight:700'>"+a.i+" "+a.t+"</div><p style='margin-top:12px;color:#888'>Приложение установлено и готово.</p></div>"}
+function renderInstalledApp(id){var a=apps[id];if(id==="spotify")return renderSpotify();if(id==="whatsapp")return renderWhatsApp();if(id==="vscode")return renderVSCode();if(id==="netflix")return renderNetflix();if(id==="zoom")return renderZoom();if(id==="paint3d")return ptBody();if(id==="photos")return renderPhotos();if(id==="stickynotes")return renderStickyNotes();if(id==="calcplus")return calcBody();if(id==="xboxbar")return renderXboxBar();if(id.indexOf("game_")===0)return renderGame(a.t,a.i);return "<div class='app-win'><div style='font-size:22px;font-weight:700'>"+a.i+" "+a.t+"</div><p style='margin-top:12px;color:#888'>Приложение установлено.</p></div>"}
 function initInstalledApp(id){if(id==="whatsapp"){var i=document.getElementById("wa-input");if(i)i.focus()}}
 function renderSpotify(){return "<div class='app-win' style='background:#121212'><div class='music-player'><div class='music-cover'>🎵</div><div class='music-track' id='sp-track'>Midnight City</div><div class='music-artist' id='sp-artist'>M83</div><div class='music-progress'><div class='music-progress-fill' id='sp-prog'></div></div><div style='display:flex;justify-content:space-between;font-size:11px;color:#888;margin-bottom:10px'><span id='sp-cur'>0:00</span><span id='sp-dur'>4:03</span></div><div class='music-controls'><button class='music-btn' onclick='spPrev()'>⏮</button><button class='music-btn play' id='sp-play' onclick='spToggle()'>▶</button><button class='music-btn' onclick='spNext()'>⏭</button></div></div></div>"}
 var spTracks=[{t:"Midnight City",a:"M83",d:243},{t:"Take on Me",a:"a-ha",d:225},{t:"Blinding Lights",a:"The Weeknd",d:200}],spIdx=0,spPlaying=false,spTimer=null,spSec=0;
@@ -378,7 +440,7 @@ function gameStart(){gameScore=0;gameActive=true;var s=document.getElementById("
 
 // === УПРАВЛЕНИЕ ОКНАМИ ===
 function bringFront(w){w.style.zIndex=++zc}
-function closeWin(id){if(wins[id]){if(id==="spotify"&&spTimer)clearInterval(spTimer);if(id==="netgame")ngLeave();wins[id].remove();delete wins[id];updateTB()}}
+function closeWin(id){if(wins[id]){if(id==="spotify"&&spTimer)clearInterval(spTimer);if(id==="ttt")tttLeave();wins[id].remove();delete wins[id];updateTB()}}
 function minWin(id){if(wins[id])wins[id].classList.add("minimized")}
 function maxWin(id){var w=wins[id];if(!w)return;if(w.dataset.m==="1"){w.style.width=apps[id].w+"px";w.style.height=apps[id].h+"px";w.style.left=(80+Math.random()*100)+"px";w.style.top=(30+Math.random()*50)+"px";w.style.position="absolute";w.style.border="1px solid rgba(0,0,0,.1)";w.dataset.m="0"}else{w.style.position="fixed";w.style.left="0";w.style.top="0";w.style.width="100vw";w.style.height="100vh";w.style.border="none";w.style.boxShadow="none";w.dataset.m="1"}}
 function dragWin(e,id){var w=wins[id];if(!w||e.target.classList.contains("win-btn")||w.dataset.m==="1")return;var ox=e.clientX-w.offsetLeft,oy=e.clientY-w.offsetTop,dg=true;bringFront(w);function mv(e){if(dg){w.style.left=(e.clientX-ox)+"px";w.style.top=Math.max(0,e.clientY-oy)+"px"}}function up(){dg=false;document.removeEventListener("mousemove",mv);document.removeEventListener("mouseup",up)}document.addEventListener("mousemove",mv);document.addEventListener("mouseup",up)}
@@ -411,41 +473,28 @@ function brNew(){var v=document.getElementById("br-addr").value;window.open(v.st
 function brNoResults(q){var f=document.getElementById("br-frame");if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px;color:#666'><h2>Ничего не найдено</h2></body></html>"}
 function brError(q,msg){var f=document.getElementById("br-frame");if(f)f.srcdoc="<html><body style='font-family:sans-serif;text-align:center;padding:80px;color:#c00'><h2>"+msg+"</h2></body></html>"}
 
-// === БЛОКНОТ ===
+// === БЛОКНОТ, КАЛЬКУЛЯТОР, ПАРАМЕТРЫ, ПРОВОДНИК, PAINT, ТЕРМИНАЛ ===
 function npSave(){var t=document.getElementById("np-area");if(!t)return;var b=new Blob([t.value],{type:"text/plain;charset=utf-8"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="документ.txt";a.click()}
 function npOpen(){var i=document.createElement("input");i.type="file";i.accept=".txt,.html,.css,.js,.json,.md";i.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){document.getElementById("np-area").value=r.result;document.getElementById("np-cnt").textContent=r.result.length+" символов"};r.readAsText(f)};i.click()}
-
-// === КАЛЬКУЛЯТОР ===
 var cv="0",cp=null,co=null,cr=false;
 function calcPress(k){var d=document.getElementById("cd");if(!d)return;if(k>="0"&&k<="9"){if(cv==="0"||cr){cv=k;cr=false}else cv+=k}else if(k==="."){if(cv.indexOf(".")<0)cv+="."}else if(k==="C"){cv="0";cp=null;co=null}else if(k==="±"){cv=String(-parseFloat(cv))}else if(k==="%"){cv=String(parseFloat(cv)/100)}else if(k==="+"||k==="-"||k==="*"||k==="/"){if(cp!==null&&co&&!cr)cv=String(doCalc(parseFloat(cp),parseFloat(cv),co));cp=cv;co=k;cr=true}else if(k==="="){if(cp!==null&&co){cv=String(doCalc(parseFloat(cp),parseFloat(cv),co));cp=null;co=null;cr=true}}d.textContent=cv}
 function doCalc(a,b,o){return o==="+"?a+b:o==="-"?a-b:o==="*"?a*b:b===0?"Ошибка":a/b}
-
-// === ПАРАМЕТРЫ ===
-function setTab(tab){document.querySelectorAll(".set-side div").forEach(function(d){d.classList.remove("act")});var el=document.getElementById("st-"+tab);if(el)el.classList.add("act");var m=document.getElementById("set-main");if(!m)return;if(tab==="sys")m.innerHTML="<h3>Система</h3><div class='toggle'><span>Уведомления</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div class='toggle'><span>Ночной свет</span><div class='tg' onclick='this.classList.toggle(\"on\");toggleNight()'></div></div><div class='toggle'><span>Прозрачность</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div style='margin-top:18px;padding:12px;background:#f5f7fa;border-radius:8px;font-size:13px'>💡 Windows 12 • Версия 12.0.1 • Сборка 2026.09</div>";else if(tab==="per")m.innerHTML="<h3>Персонализация</h3><div class='toggle'><span>🌙 Тёмная тема</span><div class='tg' onclick='document.body.classList.toggle(\"dark\");this.classList.toggle(\"on\")'></div></div><h4 style='margin:18px 0 8px;font-size:14px'>Обои</h4><div style='display:flex;flex-wrap:wrap;gap:6px'><div onclick='chgWP(1)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#1a3a6b,#5e3a9e);border:2px solid #0078d7'></div><div onclick='chgWP(2)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#2d6a4f,#95d5b2)'></div><div onclick='chgWP(3)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#7400b8,#48bfe3)'></div><div onclick='chgWP(4)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#f77f00,#003049)'></div></div>";else if(tab==="net")m.innerHTML="<h3>Сеть</h3><div style='padding:14px;background:#f5f7fa;border-radius:8px;font-size:14px'>📶 Wi-Fi: Home_Network_5G<br>⚡ Статус: Подключено<br>📡 IP: 192.168.1.42</div>";else if(tab==="acc")m.innerHTML="<h3>Учётные записи</h3><div style='display:flex;gap:12px;align-items:center;margin-bottom:16px'><div class='avatar' style='width:40px;height:40px;font-size:16px'>П</div><div><div style='font-weight:600'>Пользователь</div><div style='font-size:13px;color:#666'>user@outlook.com</div></div></div><p style='font-size:14px;color:#555'>Учётная запись Microsoft активна.</p>";else if(tab==="upd")m.innerHTML="<h3>Обновление</h3><div style='padding:18px;background:#e8f5e9;border-radius:8px;font-size:14px'>✅ Система обновлена.</div><div style='margin-top:12px;font-size:13px;color:#666'>Версия: 12.0.1 (2026.09)</div>"}
+function setTab(tab){document.querySelectorAll(".set-side div").forEach(function(d){d.classList.remove("act")});var el=document.getElementById("st-"+tab);if(el)el.classList.add("act");var m=document.getElementById("set-main");if(!m)return;if(tab==="sys")m.innerHTML="<h3>Система</h3><div class='toggle'><span>Уведомления</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div class='toggle'><span>Ночной свет</span><div class='tg' onclick='this.classList.toggle(\"on\");toggleNight()'></div></div><div class='toggle'><span>Прозрачность</span><div class='tg on' onclick='this.classList.toggle(\"on\")'></div></div><div style='margin-top:18px;padding:12px;background:#f5f7fa;border-radius:8px;font-size:13px'>💡 Windows 12 • Версия 12.0.1 • Сборка 2026.09</div>";else if(tab==="per")m.innerHTML="<h3>Персонализация</h3><div class='toggle'><span>🌙 Тёмная тема</span><div class='tg' onclick='document.body.classList.toggle(\"dark\");this.classList.toggle(\"on\")'></div></div><h4 style='margin:18px 0 8px;font-size:14px'>Обои</h4><div style='display:flex;flex-wrap:wrap;gap:6px'><div onclick='chgWP(1)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#1a3a6b,#5e3a9e);border:2px solid #0078d7'></div><div onclick='chgWP(2)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#2d6a4f,#95d5b2)'></div><div onclick='chgWP(3)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#7400b8,#48bfe3)'></div><div onclick='chgWP(4)' style='width:70px;height:44px;border-radius:6px;cursor:pointer;background:linear-gradient(135deg,#f77f00,#003049)'></div></div>";else if(tab==="net")m.innerHTML="<h3>Сеть</h3><div style='padding:14px;background:#f5f7fa;border-radius:8px;font-size:14px'>📶 Wi-Fi: Home_Network_5G<br>⚡ Статус: Подключено<br>📡 IP: 192.168.1.42</div>";else if(tab==="acc")m.innerHTML="<h3>Учётные записи</h3><div style='display:flex;gap:12px;align-items:center;margin-bottom:16px'><div class='avatar' style='width:40px;height:40px;font-size:16px'>П</div><div><div style='font-weight:600'>Пользователь</div><div style='font-size:13px;color:#666'>user@outlook.com</div></div></div><p style='font-size:14px;color:#555'>Учётная запись активна.</p>";else if(tab==="upd")m.innerHTML="<h3>Обновление</h3><div style='padding:18px;background:#e8f5e9;border-radius:8px;font-size:14px'>✅ Система обновлена.</div>"}
 function chgWP(n){var wp=document.getElementById("wp");if(n===1)wp.style.background="radial-gradient(ellipse at 30% 20%,#4a90d9,transparent 50%),radial-gradient(ellipse at 80% 70%,#7b4fc9,transparent 45%),linear-gradient(135deg,#1a3a6b,#2d5a9e 25%,#5e3a9e 55%,#2a4a7e 80%,#1a2a5a)";else if(n===2)wp.style.background="linear-gradient(135deg,#2d6a4f,#52b788 30%,#95d5b2 60%,#d8f3dc)";else if(n===3)wp.style.background="linear-gradient(135deg,#7400b8,#5e60ce 30%,#5390d9 60%,#48bfe3)";else if(n===4)wp.style.background="linear-gradient(135deg,#f77f00,#fcbf49 30%,#eae2b7 60%,#003049)"}
-
-// === ПРОВОДНИК ===
 var fs={"Рабочий стол":[{n:"Документ.txt",i:"📄",a:"notepad"},{n:"Рисунок.png",i:"🖼️",a:"paint"},{n:"Сайт.html",i:"🌐",a:"buber"}],"Документы":[{n:"Отчёт.docx",i:"📄",a:"notepad"},{n:"Таблица.xlsx",i:"📊",a:"calc"}],"Изображения":[{n:"Закат.jpg",i:"🌅",a:"paint"},{n:"Город.png",i:"🏙️",a:"paint"}],"Музыка":[{n:"Песня1.mp3",i:"🎵",a:null},{n:"Песня2.mp3",i:"🎵",a:null}],"Загрузки":[{n:"setup.exe",i:"⚙️",a:null},{n:"archive.zip",i:"🗜️",a:null},{n:"doc.pdf",i:"📕",a:"notepad"}]};
 function expGo(name,el){if(el){document.querySelectorAll(".exp-side .item").forEach(function(i){i.classList.remove("act")});el.classList.add("act")}var p=document.getElementById("exp-path");if(p)p.textContent="📁 "+name;var f=document.getElementById("exp-files");if(!f)return;f.innerHTML="";(fs[name]||[]).forEach(function(file){var d=document.createElement("div");d.className="exp-file";d.innerHTML="<div class='ico'>"+file.i+"</div><div class='nm'>"+file.n+"</div>";if(file.a)d.onclick=function(){openApp(file.a)};f.appendChild(d)})}
-
-// === PAINT ===
 var ptColor="#0078d7",ptErasing=false;
 function ptInit(){var c=document.getElementById("pt-canvas");if(!c)return;var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);var cols=["#000","#fff","#f00","#0a0","#00f","#ff0","#f0f","#0ff","#888","#0078d7","#ff9800","#9c27b0"];var cw=document.getElementById("pt-cols");if(!cw)return;cw.innerHTML="";cols.forEach(function(col){var d=document.createElement("div");d.className="pt-col";d.style.background=col;if(col===ptColor)d.classList.add("act");d.onclick=function(){ptColor=col;ptErasing=false;document.getElementById("pt-eraser").style.background="";document.querySelectorAll(".pt-col").forEach(function(x){x.classList.remove("act")});d.classList.add("act")};cw.appendChild(d)});var dg=false;c.onmousedown=function(e){dg=true;ptDraw(e)};c.onmousemove=function(e){if(dg)ptDraw(e)};c.onmouseup=function(){dg=false};c.onmouseleave=function(){dg=false};function ptDraw(e){var r=c.getBoundingClientRect(),sz=parseInt(document.getElementById("pt-size").value)||5;ctx.fillStyle=ptErasing?"#fff":ptColor;ctx.beginPath();ctx.arc(e.clientX-r.left,e.clientY-r.top,sz/2,0,Math.PI*2);ctx.fill()}}
 function ptErase(btn){ptErasing=!ptErasing;btn.style.background=ptErasing?"#0078d7":"";btn.style.color=ptErasing?"#fff":""}
 function ptClear(){var c=document.getElementById("pt-canvas");if(!c)return;var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height)}
 function ptSave(){var c=document.getElementById("pt-canvas");if(!c)return;var a=document.createElement("a");a.href=c.toDataURL("image/png");a.download="рисунок.png";a.click()}
-
-// === ТЕРМИНАЛ ===
 function termInit(){var o=document.getElementById("term-out");if(!o)return;o.innerHTML="Windows 12 [Version 12.0.1]\n(c) Concept.\n\nC:\\Users\\П> "}
 function termExec(e){if(e.key!=="Enter")return;var i=e.target,o=document.getElementById("term-out"),cmd=i.value.trim();i.value="";o.innerHTML+=esc(cmd)+"\n";var c=cmd.split(/\s+/)[0].toLowerCase(),args=cmd.split(/\s+/).slice(1),out="";if(c==="help")out="Команды: help, dir, cd, echo, date, time, cls, whoami, ver, start, ipconfig, ping, pwd, exit";else if(c==="dir"||c==="ls")out=" Документы\n Изображения\n Музыка\n Загрузки\n Рабочий стол";else if(c==="cd")out=args[0]?"C:\\Users\\П\\"+args[0]:"C:\\Users\\П";else if(c==="pwd")out="C:\\Users\\П";else if(c==="echo")out=args.join(" ");else if(c==="date")out=new Date().toLocaleDateString("ru-RU");else if(c==="time")out=new Date().toLocaleTimeString("ru-RU");else if(c==="cls"||c==="clear"){o.innerHTML="";out=""}else if(c==="whoami")out="windows12\\пользователь";else if(c==="ver")out="Windows 12 Concept [Version 12.0.1]";else if(c==="start"&&apps[args[0]]){openApp(args[0]);out="Запуск "+args[0]+"..."}else if(c==="ipconfig")out="IPv4: 192.168.1.42\nШлюз: 192.168.1.1\nDNS: 8.8.8.8";else if(c==="ping")out="PING "+(args[0]||"localhost")+" (127.0.0.1): время=1мс TTL=128";else if(c==="exit"){closeWin("terminal");return}else if(c)out="'"+c+"' не является командой. Введите 'help'";if(out)o.innerHTML+=out+"\n";o.innerHTML+="C:\\Users\\П> ";o.scrollTop=o.scrollHeight}
-
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 
-// === ЧАСЫ ===
+// === ЧАСЫ, МЕНЮ, КОНТЕКСТ ===
 function tick(){var n=new Date();document.getElementById("ct").textContent=String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");document.getElementById("cd").textContent=String(n.getDate()).padStart(2,"0")+"."+String(n.getMonth()+1).padStart(2,"0")+"."+n.getFullYear()}
 tick();setInterval(tick,1000);
-
-// === МЕНЮ И КОНТЕКСТ ===
 document.getElementById("start-btn").onclick=function(e){e.stopPropagation();document.getElementById("start-menu").classList.toggle("open");closeTrayPanel()};
 document.addEventListener("click",function(e){var sm=document.getElementById("start-menu");if(!sm.contains(e.target)&&e.target.id!=="start-btn")sm.classList.remove("open");var tp=document.getElementById("tray-panel");if(tp.classList.contains("open")&&!tp.contains(e.target)&&!e.target.classList.contains("tray-btn")&&e.target.id!=="tray-clock")tp.classList.remove("open");hideCtx()});
 function closeTrayPanel(){document.getElementById("tray-panel").classList.remove("open")}
